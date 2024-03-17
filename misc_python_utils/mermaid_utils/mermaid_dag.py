@@ -2,9 +2,7 @@ import logging
 
 from misc_python_utils.beartypes import Dataclass
 from misc_python_utils.mermaid_utils.mermaid_data_models import MermaidNode
-from misc_python_utils.mermaid_utils.mermaid_markdown_diagrams import (
-    mermaid_flowchart,
-)
+from misc_python_utils.mermaid_utils.mermaid_markdown_diagrams import mermaid_flowchart
 
 logger = logging.getLogger(
     __name__.replace("nmaudio_", "nmaudio."),

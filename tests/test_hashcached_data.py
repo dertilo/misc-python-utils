@@ -2,7 +2,7 @@ import tempfile
 from dataclasses import dataclass, field
 from typing import ClassVar
 
-from misc_python_utils.hashcached_data import HashCachedData
+from misc_python_utils.hashcached_data.hashcached_data import HashCachedData
 from misc_python_utils.prefix_suffix import BASE_PATHES, PrefixSuffix
 
 DEFAULT = "<DEFAULT>"

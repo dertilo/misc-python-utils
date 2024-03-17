@@ -15,8 +15,8 @@ from misc_python_utils.buildable_dataclasses.buildable import (
     Buildable,
     BuildableBehavior,
 )
+from misc_python_utils.file_utils.readwrite_files import read_jsonl, write_jsonl
 from misc_python_utils.prefix_suffix import BASE_PATHES, PrefixSuffix
-from misc_python_utils.readwrite_files import read_jsonl, write_jsonl
 from misc_python_utils.utils import slugify_en_olny, slugify_with_underscores
 
 logger = logging.getLogger(

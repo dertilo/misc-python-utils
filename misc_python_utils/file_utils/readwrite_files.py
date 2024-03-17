@@ -88,7 +88,8 @@ def write_lines(
 
 @contextmanager
 def writable(
-    file: str, mode: Literal["w", "a"] = "w"
+    file: str,
+    mode: Literal["w", "a"] = "w",
 ) -> Iterator[TextIO | gzip.GzipFile]:
     mode += "b"
     if file.endswith(".gz"):

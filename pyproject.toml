@@ -10,8 +10,11 @@ packages = [{ include = "misc_python_utils" }]
 
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = "^3.12"
 beartype = "^0.16.3" # since 0.16.3 typehinting for Dataclass really works!
+nested-dataclass-serialization = "^0.1.0"
+python-slugify = "^8.0.1"
+result = "^0.16.0"
 
 [tool.poetry.group.test.dependencies]
 pytest = "^7.4.2"

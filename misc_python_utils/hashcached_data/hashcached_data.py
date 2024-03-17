@@ -5,18 +5,17 @@ from dataclasses import dataclass, field, fields
 from pathlib import Path
 from typing import ClassVar
 
-from misc_python_utils.beartypes import Dataclass
-from misc_python_utils.buildable_dataclasses.buildable import Buildable
-from misc_python_utils.dataclass_serialization.dataclass_hashing import (
-    hash_dataclass,
-)
-from misc_python_utils.dataclass_serialization.dataclass_serialization import (
+from nested_dataclass_serialization.dataclass_hashing import hash_dataclass
+from nested_dataclass_serialization.dataclass_serialization import (
     deserialize_dataclass,
     encode_dataclass,
 )
+
+from misc_python_utils.beartypes import Dataclass
+from misc_python_utils.buildable_dataclasses.buildable import Buildable
 from misc_python_utils.dataclass_utils import UNDEFINED, all_undefined_must_be_filled
+from misc_python_utils.file_utils.readwrite_files import read_file, write_json
 from misc_python_utils.prefix_suffix import PrefixSuffix
-from misc_python_utils.readwrite_files import read_file, write_json
 from misc_python_utils.utils import Singleton
 
 

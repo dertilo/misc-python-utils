@@ -4,12 +4,12 @@ import shutil
 from collections.abc import Callable, Iterable
 
 from misc_python_utils.dict_utils import flatten_nested_dict
-from misc_python_utils.readwrite_csv_files import (
+from misc_python_utils.file_utils.readwrite_csv_files import (
     read_csv,
     write_csv,
     write_dicts_to_csv,
 )
-from misc_python_utils.readwrite_files import read_jsonl, write_lines
+from misc_python_utils.file_utils.readwrite_files import read_jsonl, write_lines
 from misc_python_utils.utils import sanitize_hexappend_filename
 
 
