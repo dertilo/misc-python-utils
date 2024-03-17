@@ -20,7 +20,7 @@ from misc_python_utils.prefix_suffix import BASE_PATHES, PrefixSuffix
 from misc_python_utils.utils import slugify_en_olny, slugify_with_underscores
 
 logger = logging.getLogger(
-    __name__.replace("nmaudio_", "nmaudio."),
+    __name__,
 )  # "The name is potentially a period-separated hierarchical", see: https://docs.python.org/3.10/library/logging.html
 
 SlugStr = Annotated[NeStr, Is[lambda s: slugify_with_underscores(s) == s]]

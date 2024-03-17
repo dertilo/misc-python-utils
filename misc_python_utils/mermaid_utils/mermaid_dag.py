@@ -5,7 +5,7 @@ from misc_python_utils.mermaid_utils.mermaid_data_models import MermaidNode
 from misc_python_utils.mermaid_utils.mermaid_markdown_diagrams import mermaid_flowchart
 
 logger = logging.getLogger(
-    __name__.replace("nmaudio_", "nmaudio."),
+    __name__,
 )  # "The name is potentially a period-separated hierarchical", see: https://docs.python.org/3.10/library/logging.html
 
 HTML = str

@@ -8,7 +8,7 @@ from pathlib import Path
 from result import Err, Ok, Result
 
 logger = logging.getLogger(
-    __name__.replace("nmaudio_", "nmaudio."),
+    __name__,
 )  # "The name is potentially a period-separated hierarchical", see: https://docs.python.org/3.10/library/logging.html
 
 try:
@@ -50,11 +50,7 @@ class GitRepoState:
         git_remote_url = self.repo_url
         assert git_remote_url.startswith("git@")
         assert git_remote_url.endswith(".git")
-        return (
-            git_remote_url.replace("git@", "https://")
-            .replace(".git", "")
-            .replace("de:iais", "de/iais")
-        )
+        return git_remote_url.replace("git@", "https://").replace(".git", "")
 
     def add_and_commit_file(self, file: Path) -> None:
         self.repo.git.add(str(file))

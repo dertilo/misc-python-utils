@@ -18,7 +18,7 @@ from misc_python_utils.mermaid_utils.mermaid_data_models import (
 from misc_python_utils.prefix_suffix import PrefixSuffix
 
 logger = logging.getLogger(
-    __name__.replace("nmaudio_", "nmaudio."),
+    __name__,
 )  # "The name is potentially a period-separated hierarchical", see: https://docs.python.org/3.10/library/logging.html
 
 CLASSES_BLACKLIST = [
