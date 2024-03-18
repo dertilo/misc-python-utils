@@ -1,11 +1,10 @@
+from nested_dataclass_serialization.dataclass_serialization import encode_dataclass
+
 from misc_python_utils.beartypes import Dataclass
-from misc_python_utils.dataclass_serialization.dataclass_serialization import (
-    encode_dataclass,
-)
+from misc_python_utils.file_utils.readwrite_files import write_file
 from misc_python_utils.mermaid_utils._mermaid_markdown_from_nested_dataclasses import (
     generate_mermaid_triples,
 )
-from misc_python_utils.readwrite_files import write_file
 
 
 def write_dataclass_to_mermaid(

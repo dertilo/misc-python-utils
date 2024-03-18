@@ -1,6 +1,6 @@
 import diff_match_patch
 
-from misc_python_utils.readwrite_files import write_file
+from misc_python_utils.file_utils.readwrite_files import write_file
 
 
 def diff_to_html_via_dmp(text1: str, text2: str) -> str:

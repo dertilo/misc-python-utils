@@ -4,11 +4,12 @@ from collections.abc import Iterator
 from dataclasses import fields
 from typing import Any
 
-from misc_python_utils.dataclass_serialization.dataclass_serialization_utils import (
-    SPECIAL_KEYS,
-)
+from nested_dataclass_serialization.dataclass_serialization_utils import SPECIAL_KEYS
+
 from misc_python_utils.dataclass_utils import _UNDEFINED
-from misc_python_utils.hashcached_data import _CREATE_CACHE_DIR_IN_BASE_DIR
+from misc_python_utils.hashcached_data.hashcached_data import (
+    _CREATE_CACHE_DIR_IN_BASE_DIR,
+)
 from misc_python_utils.mermaid_utils.mermaid_data_models import (
     Dict,
     MermaidNode,
@@ -101,7 +102,9 @@ def _node_dependencies_from_dict(
         # elif :
 
     d: dict[str, Any] = obj
-    params = [k for k, v in d.items() if is_param(v) and k not in SPECIAL_KEYS]
+    params = [
+        k for k, v in d.items() if is_param(v) and k not in SPECIAL_KEYS
+    ]  # TODO(tilo): coupled too closely via SPECIAL_KEYS to nested-dataclass-serialization!
     dependencies = [
         k for k, v in d.items() if k not in params and k not in SPECIAL_KEYS
     ]

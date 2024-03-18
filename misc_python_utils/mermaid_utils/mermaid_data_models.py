@@ -6,10 +6,10 @@ from typing import Any, ClassVar
 
 from result import Err, Ok
 
-from misc_python_utils.as_result_logged import (
+from misc_python_utils.error_handling.as_result_logged import (
     as_result_logged_panic_for_param_violations,
 )
-from misc_python_utils.git_repo_state import (
+from misc_python_utils.gitrepo_utils.git_repo_state import (
     UncommittedChanges,
     permanent_link_from_class,
 )

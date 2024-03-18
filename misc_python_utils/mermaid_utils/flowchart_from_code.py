@@ -7,8 +7,6 @@ from dataclasses import dataclass
 
 from pyflowchart import Flowchart
 
-from misc_python_utils.readwrite_files import write_file
-
 logger = logging.getLogger(
     __name__,
 )  # "The name is potentially a period-separated hierarchical", see: https://docs.python.org/3.10/library/logging.html
@@ -244,6 +242,8 @@ def cmdline_run(cmd) -> str:
 
 
 if __name__ == "__main__":
+    from misc_python_utils.file_utils.readwrite_files import write_file
+
     with open(  # noqa: PTH123
         __file__,
     ) as f:
