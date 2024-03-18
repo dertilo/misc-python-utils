@@ -9,7 +9,7 @@ from misc_python_utils.prefix_suffix import BASE_PATHES, PrefixSuffix
 TEST_RESOURCES = "tests/resources"
 
 # pytest --log-cli-level is not working properly, see: https://stackoverflow.com/questions/52086974/pytest-selective-log-levels-on-a-per-module-basis
-prepare_logger("nmaudio", logging.DEBUG)
+prepare_logger("misc_python_utils", logging.DEBUG)
 
 
 @pytest.fixture()

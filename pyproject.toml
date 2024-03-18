@@ -11,7 +11,7 @@ packages = [{ include = "misc_python_utils" }]
 
 [tool.poetry.dependencies]
 python = "^3.12"
-beartype = "^0.16.3" # since 0.16.3 typehinting for Dataclass really works!
+beartype = "^0" # blindly trust beartype
 nested-dataclass-serialization = "^0.1.0"
 python-slugify = "^8.0.1"
 result = "^0.16.0"
