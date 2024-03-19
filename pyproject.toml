@@ -10,7 +10,7 @@ packages = [{ include = "misc_python_utils" }]
 
 
 [tool.poetry.dependencies]
-python = "^3.12"
+python = "^3.10"
 beartype = "^0" # blindly trust beartype
 nested-dataclass-serialization = "^0.1.0"
 python-slugify = "^8.0.1"
