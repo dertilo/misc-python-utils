@@ -5,7 +5,6 @@ import sys
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from git import InvalidGitRepositoryError
 from result import Err, Ok, Result
 
 logger = logging.getLogger(
@@ -13,7 +12,7 @@ logger = logging.getLogger(
 )  # "The name is potentially a period-separated hierarchical", see: https://docs.python.org/3.10/library/logging.html
 
 try:
-    from git import Remote, Repo
+    from git import InvalidGitRepositoryError, Remote, Repo
 except ImportError:
     logger.warning("no git installed!")
     Repo, Remote = None, None
@@ -111,16 +110,16 @@ def file_has_uncommitted_changes(class_file: Path | str, repo: Repo) -> bool:
 
 def find_git_repo(
     path: Path,
-) -> Result[Repo, str | ImportError | InvalidGitRepositoryError]:
+) -> Result[Repo, str | ImportError]:
     if Repo is None:
         return Err(ImportError("no git installed!"))
 
-    error = None
     for _ in range(100):
         try:
             repo = Repo(path)
             return Ok(repo)  # noqa: TRY300
-        except InvalidGitRepositoryError as e:
-            error = e
+        except InvalidGitRepositoryError:
             path = path.parent
-    return Err(error)  # not wrapping the exception here, cause who cares
+    return Err(
+        "did not find git repo",
+    )  # not wrapping the exception here, cause who cares

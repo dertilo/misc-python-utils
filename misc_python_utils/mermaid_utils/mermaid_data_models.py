@@ -4,7 +4,6 @@ import logging
 from dataclasses import dataclass
 from typing import Any, ClassVar
 
-from git import InvalidGitRepositoryError
 from result import Err, Ok
 
 from misc_python_utils.error_handling.as_result_logged import (
@@ -62,7 +61,7 @@ class MermaidNode:
                         logger.warning(f"uncommitted changes in {msg}")
                 case Err(ImportError()):
                     pass
-                case Err(InvalidGitRepositoryError()):
+                case Err("did not find git repo"):
                     pass  # if class comes from "normal" python dependency installed in some env it is expected to not be inside a gitrepo
                 case Err(some_error):
                     logger.error(f"{some_error}")
