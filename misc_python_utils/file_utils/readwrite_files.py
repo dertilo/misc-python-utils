@@ -5,7 +5,7 @@ import locale
 from collections.abc import Iterable, Iterator
 from contextlib import contextmanager
 from pathlib import Path
-from typing import Any, Literal, TextIO
+from typing import Any, Literal
 
 assert locale.getpreferredencoding(False) == "UTF-8"
 
@@ -87,10 +87,10 @@ def write_lines(
 
 
 @contextmanager
-def writable(
+def writable(  # noqa: ANN201
     file: str,
     mode: Literal["w", "a"] = "w",
-) -> Iterator[TextIO | gzip.GzipFile]:
+):  # python 3.10 does not like this type-hint (it works for 3.12): Iterator[TextIO | gzip.GzipFile]
     mode += "b"
     if file.endswith(".gz"):
         with open(file, mode=mode) as f:  # noqa: SIM117, PTH123
