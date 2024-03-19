@@ -15,6 +15,7 @@ beartype = "^0" # blindly trust beartype
 nested-dataclass-serialization = "^0.1.0"
 python-slugify = "^8.0.1"
 result = "^0.16.0"
+gitpython = "^3.1.42"
 
 [tool.poetry.group.test.dependencies]
 pytest = "^7.4.2"

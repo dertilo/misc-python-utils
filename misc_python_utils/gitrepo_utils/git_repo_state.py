@@ -5,6 +5,7 @@ import sys
 from dataclasses import dataclass, field
 from pathlib import Path
 
+from git import InvalidGitRepositoryError
 from result import Err, Ok, Result
 
 logger = logging.getLogger(
@@ -50,7 +51,11 @@ class GitRepoState:
         git_remote_url = self.repo_url
         assert git_remote_url.startswith("git@")
         assert git_remote_url.endswith(".git")
-        return git_remote_url.replace("git@", "https://").replace(".git", "")
+        return (
+            git_remote_url.replace("git@", "https://")
+            .replace(".git", "")
+            .replace(":", "/")  # is this gitlab specific?
+        )
 
     def add_and_commit_file(self, file: Path) -> None:
         self.repo.git.add(str(file))
@@ -104,11 +109,11 @@ def file_has_uncommitted_changes(class_file: Path | str, repo: Repo) -> bool:
     return len(gitdiff) > 0 and str(class_file).endswith(gitdiff[0].a_path)
 
 
-def find_git_repo(path: Path) -> Result[Repo, str | ImportError]:
+def find_git_repo(
+    path: Path,
+) -> Result[Repo, str | ImportError | InvalidGitRepositoryError]:
     if Repo is None:
         return Err(ImportError("no git installed!"))
-
-    from git import InvalidGitRepositoryError
 
     error = None
     for _ in range(100):
@@ -118,4 +123,4 @@ def find_git_repo(path: Path) -> Result[Repo, str | ImportError]:
         except InvalidGitRepositoryError as e:
             error = e
             path = path.parent
-    return Err(f"{error}")  # not wrapping the exception here, cause who cares
+    return Err(error)  # not wrapping the exception here, cause who cares
