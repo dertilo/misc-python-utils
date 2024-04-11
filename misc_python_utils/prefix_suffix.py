@@ -1,11 +1,12 @@
 import dataclasses
 from dataclasses import dataclass
-from typing import Any, ClassVar, Union
+from typing import Any, ClassVar, TypeVar
 
 from misc_python_utils.buildable_dataclasses.buildable import Buildable
 from misc_python_utils.dataclass_utils import UNDEFINED, Undefined
 
-BASE_PATHES: dict[str, Union[str, "PrefixSuffix"]] = {}
+TPrefixSuffix = TypeVar("TPrefixSuffix", bound="PrefixSuffix")
+BASE_PATHES: dict[str, str | TPrefixSuffix] = {}
 BASE_PATHES[
     "pwd"
 ] = "."  # noqa: S105 -> this is a false-positive! pwd does not stand for "password" but the "current path"

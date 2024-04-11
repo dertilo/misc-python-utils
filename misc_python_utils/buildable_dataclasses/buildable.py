@@ -78,7 +78,7 @@ class Buildable:
     @final  # does not enforce it but at least the IDE warns you!
     def build(
         self: TBuildable,
-    ) -> TBuildable:
+    ) -> TBuildable:  # TODO: Self here?
         """
         should NOT be overwritten!
         """

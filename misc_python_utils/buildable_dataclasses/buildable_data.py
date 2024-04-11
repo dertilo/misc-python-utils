@@ -52,6 +52,7 @@ class DataBuilder(BuildableBehavior[TBuildableData]):
             exist_ok=True,
         )
         obj._build_data()  # noqa: SLF001
+        obj._was_built = True  # noqa: SLF001 # tilo: this _was_built refers to "was built in this python-process"
         if not obj._is_data_valid:  # noqa: SLF001
             msg = f"{cls.__class__.__name__}: {obj.name} failed to build data in {obj.data_dir=}"
             raise AssertionError(msg)
@@ -90,8 +91,10 @@ class BuildableData(ABC, Buildable):
         ...
 
     @property
+    @abstractmethod
     def _is_data_valid(self) -> bool:
-        return False
+        # if you want to rebuilt all the time check for "_was_built" here
+        ...
 
     @abstractmethod
     def _build_data(self) -> None:

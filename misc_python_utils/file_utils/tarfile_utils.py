@@ -17,7 +17,6 @@ class TarFileOutput:
     exfile_object: tarfile.ExFileObject
 
 
-# TODO: why was this commented out?
 def filter_gen_targz_members(
     targz_file: str,
     is_of_interest_fun: Callable[[tarfile.TarInfo], bool],
