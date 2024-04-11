@@ -7,7 +7,8 @@ class CustomFormatter(logging.Formatter):
     """
 
     blue = "\x1b[34;20m"
-    grey = "\x1b[38;20m"
+    # grey = "\x1b[38;20m"
+    dark_green = "\x1b[38;5;2m"
     yellow = "\x1b[33;20m"
     red = "\x1b[31;20m"
     bold_red = "\x1b[31;1m"
@@ -18,7 +19,7 @@ class CustomFormatter(logging.Formatter):
     # format= '%(name)-12s: %(levelname)-8s %(message)s'
     FORMATS = {  # noqa: RUF012
         logging.DEBUG: blue + format_ + reset,
-        logging.INFO: grey + format_ + reset,
+        logging.INFO: dark_green + format_ + reset,
         logging.WARNING: yellow + format_ + reset,
         logging.ERROR: red + format_ + reset,
         logging.CRITICAL: bold_red + format_ + reset,

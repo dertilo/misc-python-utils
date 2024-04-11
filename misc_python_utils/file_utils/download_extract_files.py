@@ -1,6 +1,6 @@
 import os
 import re
-from typing import Optional, Callable
+from collections.abc import Callable
 
 from misc_python_utils.beartypes import Directory
 from misc_python_utils.processing_utils.processing_utils import exec_command
@@ -14,8 +14,7 @@ def download_data(
     unzip_it: bool = False,
     do_raise: bool = True,
     remove_zipped: bool = False,
-) -> Optional[str]:
-
+) -> str | None:
     url = base_url + "/" + file_name
     file = data_dir + "/" + file_name
 
@@ -33,9 +32,8 @@ def download_data(
                 if remove_zipped:
                     os.remove(file)
             return extract_folder
-        else:
-            if not os.path.isfile(file):
-                wget_file(url, data_dir, verbose)
+        elif not os.path.isfile(file):
+            wget_file(url, data_dir, verbose)
     except FileNotFoundError as e:
         if do_raise:
             raise e
@@ -77,20 +75,22 @@ def wget_file(
     url: str,
     data_folder: str,
     verbose=False,
-    user: Optional[str] = None,
-    password: Optional[str] = None,
+    file_name: str | None = None,
+    user: str | None = None,
+    password: str | None = None,
 ):
     # TODO(tilo): wget.download cannot continue ??
     passw = f" --password {password} " if password is not None else ""
     user = f' --user "{user}" ' if user is not None else ""
     quiet = " -q " if not verbose else ""
-    file_name = url.split("/")[-1]
+    if file_name is None:
+        file_name = url.split("/")[-1]
     file = f"{data_folder}/{file_name}"
     os.makedirs(data_folder, exist_ok=True)
     if os.path.isfile(file):
-        cmd = f"wget -O {file} -c -N{quiet}{passw}{user} -P {data_folder} {url}"
+        cmd = f'wget -O {file} -c -N{quiet}{passw}{user} -P {data_folder} "{url}"'
     else:
-        cmd = f"wget -O {file} -c {quiet}{passw}{user} -P {data_folder} {url}"
+        cmd = f'wget -O {file} -c {quiet}{passw}{user} -P {data_folder} "{url}"'
 
     print(f"{cmd=}")
     os.system(cmd)

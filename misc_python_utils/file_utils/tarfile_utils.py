@@ -3,6 +3,7 @@ import itertools
 import logging
 import tarfile
 from collections.abc import Callable, Iterator
+from pathlib import Path
 
 from tqdm import tqdm
 
@@ -27,7 +28,7 @@ def filter_gen_targz_members(
         for member in tqdm(
             itertools.islice(tar, start, stop),
             position=0,
-            desc="iterating over targz content",
+            desc=f"iterating over {Path(targz_file).name}",
         ):
             member: tarfile.TarInfo
             if is_of_interest_fun(member):
