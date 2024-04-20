@@ -1,5 +1,5 @@
 import dataclasses
-from typing import TypeVar
+from typing import Any, TypeVar
 
 from misc_python_utils.beartypes import Dataclass
 from misc_python_utils.utils import Singleton
@@ -45,3 +45,46 @@ def all_undefined_must_be_filled(
         raise AssertionError(
             msg,
         )
+
+
+@dataclasses.dataclass(slots=True)
+class EnforcedSlots:
+    """
+    all children of this class must be slotted
+
+    to match behavior of dataclasses with slots=True that don't inherit from unslotted classes
+    a slotted class that inherits from an unslotted one, also inherits the __dict__ attribute
+
+    """
+
+    def __setattr__(self, __name: str, __value: Any) -> None:
+        """
+        to prevent accidental assignment of attributes that are not in __slots__
+        """
+        if __name in self.__slots__:
+            super(EnforcedSlots, self).__setattr__(__name, __value)
+        else:
+            msg = f"'{self.__class__.__name__}' object has no attribute '{__name}'"
+            raise AttributeError(msg)
+
+
+class MaybeEnforcedSlots:
+    """
+    this class itself is polluting children with a dict-attribute! but thereby also allows non-slotted children
+
+    to match behavior of dataclasses with slots=True that don't inherit from unslotted classes
+    a slotted class that inherits from an unslotted one, also inherits the __dict__ attribute
+    """
+
+    def __setattr__(self, __name: str, __value: Any) -> None:
+        """
+        to prevent accidental assignment of attributes that are not in __slots__
+        """
+        is_slotted = (
+            len(getattr(self, "__slots__", {})) > 0
+        )  # count existing but empty _slots__ as "unslotted", just to be a little more forgiving
+        if not is_slotted or __name in self.__slots__:
+            super().__setattr__(__name, __value)
+        else:
+            msg = f"'{self.__class__.__name__}' object with {self.__slots__=} has no attribute '{__name}'"
+            raise AttributeError(msg)
