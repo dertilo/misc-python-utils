@@ -31,15 +31,23 @@ class CustomFormatter(logging.Formatter):
         return formatter.format(record)
 
 
-def prepare_logger(namespaces: str | list[str], log_level: int = logging.DEBUG) -> None:
-    if isinstance(namespaces, str):
-        namespaces = [namespaces]
+def prepare_logger(
+    namespaces: str | list[str] | None = None,
+    log_level: int = logging.DEBUG,
+    namespaces2loglevel: dict[tuple[str, ...], int] = None,  # noqa: RUF013
+) -> None:
+    if namespaces2loglevel is None:
+        if isinstance(namespaces, str):
+            namespaces2loglevel = {(namespaces,): log_level}
+        elif isinstance(namespaces, list):
+            namespaces2loglevel = {tuple(namespaces): log_level}
 
     ch = logging.StreamHandler()
     ch.setFormatter(CustomFormatter())
     root_logger = logging.getLogger()
     root_logger.handlers.clear()
     root_logger.addHandler(ch)
-    for ns in namespaces:
-        logger = logging.getLogger(ns)
-        logger.setLevel(log_level)
+    for logger_names, log_level in namespaces2loglevel.items():
+        for ns in logger_names:
+            logger = logging.getLogger(ns)
+            logger.setLevel(log_level)

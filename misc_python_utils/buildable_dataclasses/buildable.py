@@ -8,7 +8,10 @@ from dataclasses import dataclass, fields
 from time import time
 from typing import ClassVar, Generic, TypeVar, final
 
-from misc_python_utils.dataclass_utils import all_undefined_must_be_filled
+from misc_python_utils.dataclass_utils import (
+    MaybeEnforcedSlots,
+    all_undefined_must_be_filled,
+)
 
 logger = logging.getLogger(
     __name__,
@@ -25,7 +28,6 @@ class GotWasBuilt(ABC):
 TBuildable = TypeVar("TBuildable", bound="Buildable")
 
 
-@dataclass(slots=True)
 class BuildableBehavior(ABC, Generic[TBuildable]):
     @classmethod
     @abstractmethod
@@ -50,7 +52,7 @@ NamedChild = namedtuple("NamedChild", "name child")  # noqa: PYI024
 
 
 @dataclass(kw_only=True)
-class Buildable:
+class Buildable(MaybeEnforcedSlots):
     """
     base-class for "buildable Dataclasses"
 

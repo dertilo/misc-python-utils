@@ -1,12 +1,13 @@
 import os
 import re
 from collections.abc import Callable
+from pathlib import Path
 
 from misc_python_utils.beartypes import Directory
 from misc_python_utils.processing_utils.processing_utils import exec_command
 
 
-def download_data(
+def download_data(  # noqa: PLR0913
     base_url: str,
     file_name: str,
     data_dir: Directory,
@@ -25,39 +26,39 @@ def download_data(
             extract_folder = re.sub(regex, "", file)
             assert extract_folder != file
 
-            if not os.path.isdir(extract_folder):
+            if not Path(extract_folder).is_dir():
                 wget_file(url, data_dir, verbose)
-                os.makedirs(extract_folder, exist_ok=True)
+                Path(extract_folder).mkdir(exist_ok=True)
                 extract_file(file, extract_folder, get_build_extract_command_fun(file))
                 if remove_zipped:
-                    os.remove(file)
+                    Path(file).unlink()
             return extract_folder
-        elif not os.path.isfile(file):
+        elif not Path(file).is_file():
             wget_file(url, data_dir, verbose)
     except FileNotFoundError as e:
         if do_raise:
-            raise e
+            raise e  # noqa: TRY201
 
 
-def get_build_extract_command_fun(file: str):
+def get_build_extract_command_fun(file: str) -> Callable:  # noqa: C901
     if any(file.endswith(suf) for suf in [".zip", ".ZIP"]):
 
-        def fun(dirr, file):
+        def fun(dirr, file):  # noqa: ANN001, ANN202
             return f"unzip -d {dirr} {file}"
 
     elif any(file.endswith(suf) for suf in [".tar.gz", ".tgz"]):
 
-        def fun(dirr, file):
+        def fun(dirr, file):  # noqa: ANN001, ANN202
             return f"tar xzf {file} -C {dirr}"
 
     elif any(file.endswith(suf) for suf in [".tar", ".TAR"]):
 
-        def fun(dirr, file):
+        def fun(dirr, file):  # noqa: ANN001, ANN202
             return f"tar xf {file} -C {dirr}"
 
     elif any(file.endswith(suf) for suf in [".gz", ".GZ"]):
 
-        def fun(dirr, file):
+        def fun(dirr, file):  # noqa: ANN001, ANN202
             return f"gzip -dc {file} {dirr}"
 
     else:
@@ -65,20 +66,22 @@ def get_build_extract_command_fun(file: str):
     return fun
 
 
-def extract_file(file, extract_folder, build_extract_command_fun: Callable):
+def extract_file(  # noqa: ANN201
+    file, extract_folder, build_extract_command_fun: Callable  # noqa: ANN001, COM812
+):  # noqa: ANN001, ANN201
     cmd = build_extract_command_fun(extract_folder, file)
     _, stderr = exec_command(cmd)
     assert len(stderr) == 0, f"{cmd=}: {stderr=}"
 
 
-def wget_file(
+def wget_file(  # noqa: PLR0913
     url: str,
     data_folder: str,
-    verbose=False,
+    verbose: bool = False,
     file_name: str | None = None,
     user: str | None = None,
     password: str | None = None,
-):
+) -> None:
     # TODO(tilo): wget.download cannot continue ??
     passw = f" --password {password} " if password is not None else ""
     user = f' --user "{user}" ' if user is not None else ""
@@ -86,24 +89,30 @@ def wget_file(
     if file_name is None:
         file_name = url.split("/")[-1]
     file = f"{data_folder}/{file_name}"
-    os.makedirs(data_folder, exist_ok=True)
-    if os.path.isfile(file):
+    os.makedirs(data_folder, exist_ok=True)  # noqa: PTH103
+    if Path(file).is_file():  # noqa: PTH113
         cmd = f'wget -O {file} -c -N{quiet}{passw}{user} -P {data_folder} "{url}"'
     else:
         cmd = f'wget -O {file} -c {quiet}{passw}{user} -P {data_folder} "{url}"'
 
-    print(f"{cmd=}")
-    os.system(cmd)
+    print(f"{cmd=}")  # noqa: T201
+    os.system(cmd)  # noqa: S605
     # TODO: why is subprocess not working?
     # download_output = exec_command(cmd)
     # if err_code != 0:
     #     raise FileNotFoundError(f"could not download {url}")
 
 
-def main():
+def main():  # noqa: ANN201
     file_name = "/test-other.tar.gz"
     base_url = "http://www.openslr.org/resources/12"
-    download_data(base_url, file_name, "/tmp/test_data", unzip_it=True, verbose=True)
+    download_data(
+        base_url,
+        file_name,
+        "/tmp/test_data",  # noqa: S108
+        unzip_it=True,
+        verbose=True,  # noqa: S108, COM812
+    )  # noqa: S108
 
 
 if __name__ == "__main__":

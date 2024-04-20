@@ -40,6 +40,7 @@ CasedSlugStr = Annotated[NeStr, Is[lambda s: is_cased_sluggy(s)]]
 TBuildableData = TypeVar("TBuildableData", bound="BuildableData")
 
 
+@dataclass(slots=True)
 class DataBuilder(BuildableBehavior[TBuildableData]):
     @classmethod
     def it_is_ready(cls, obj: TBuildableData) -> bool:

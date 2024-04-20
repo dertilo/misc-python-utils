@@ -62,6 +62,8 @@ Directory = Annotated[str, Is[lambda f: Path(f).is_dir()]]
 # -------------------------------------------------------------------------------------
 
 NDIM = "ndim"
+is_1_dimensional = IsAttr[NDIM, IsEqual[1]]
+
 try:  # noqa: WPS229
     # TODO: looks somewhat ugly!
     from numpy import float32, floating, int16, int32, number
@@ -71,7 +73,6 @@ try:  # noqa: WPS229
     seconddim_nonempty = lambda x: x.shape[1] > 0
 
     # 1 Dimensional
-    is_1_dimensional = IsAttr[NDIM, IsEqual[1]]
     NpNumberDim1 = Annotated[NDArray[number], is_1_dimensional]
     NeNpNumberDim1 = Annotated[NpNumberDim1, Is[firstdim_nonempty]]
 
