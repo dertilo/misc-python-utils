@@ -5,7 +5,7 @@ import locale
 from collections.abc import Iterable, Iterator
 from contextlib import contextmanager
 from pathlib import Path
-from typing import Any, Literal
+from typing import Any
 
 assert locale.getpreferredencoding(False) == "UTF-8"
 
@@ -15,7 +15,7 @@ FilePath = str | Path
 def write_jsonl(
     file: FilePath,
     data: Iterable[dict | (list | tuple)],
-    mode: Literal["w", "a"] = "w",
+    mode: str = "w",  # str
     do_flush: bool = False,
 ) -> None:
     file = str(file)
@@ -34,7 +34,7 @@ def write_jsonl(
 def write_json(
     file: FilePath,
     datum: dict,
-    mode: Literal["w", "a"] = "w",
+    mode: str = "w",
     do_flush: bool = False,
     indent: int | None = None,  # use indent =4 for "pretty json"
 ) -> None:
@@ -50,7 +50,7 @@ def write_json(
 def write_file(
     file: FilePath,
     s: str,
-    mode: Literal["w", "a"] = "w",
+    mode: str = "w",
     do_flush: bool = False,
 ) -> None:
     file = str(file)
@@ -74,7 +74,7 @@ def read_file(file: FilePath, encoding: str = "utf-8") -> str:
 def write_lines(
     file: FilePath,
     lines: Iterable[str],
-    mode: Literal["w", "a"] = "w",
+    mode: str = "w",
 ) -> None:
     file = str(file)
 
@@ -89,7 +89,7 @@ def write_lines(
 @contextmanager
 def writable(  # noqa: ANN201
     file: str,
-    mode: Literal["w", "a"] = "w",
+    mode: str = "w",
 ):  # python 3.10 does not like this type-hint (it works for 3.12): Iterator[TextIO | gzip.GzipFile]
     mode += "b"
     if file.endswith(".gz"):

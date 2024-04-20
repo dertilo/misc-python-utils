@@ -64,7 +64,7 @@ class EnforcedSlots:
         if __name in self.__slots__:
             super(EnforcedSlots, self).__setattr__(__name, __value)
         else:
-            msg = f"'{self.__class__.__name__}' object has no attribute '{__name}'"
+            msg = f"'{self.__class__.__name__}' object with {self.__slots__=} has no attribute '{__name}'"
             raise AttributeError(msg)
 
 
@@ -87,4 +87,28 @@ class MaybeEnforcedSlots:
             super().__setattr__(__name, __value)
         else:
             msg = f"'{self.__class__.__name__}' object with {self.__slots__=} has no attribute '{__name}'"
+            raise AttributeError(msg)
+
+
+@dataclasses.dataclass
+class FixedDict:
+    """
+    workaround cause slots and multi-inheritance don't work together
+
+    """
+
+    _pseudo_slots: tuple[str, ...] = dataclasses.field(init=False, repr=False)
+
+    def __post_init__(self):
+        self._pseudo_slots = tuple(f.name for f in dataclasses.fields(self))
+
+    def __setattr__(self, __name: str, __value: Any) -> None:
+        """
+        to prevent dynamic assignment of unknown/new attributes
+        """
+        is_already_initialized = hasattr(self, "_pseudo_slots")
+        if not is_already_initialized or __name in self._pseudo_slots:
+            super().__setattr__(__name, __value)
+        else:
+            msg = f"'{self.__class__.__name__}' object with {self._pseudo_slots=} has no attribute '{__name}'"
             raise AttributeError(msg)

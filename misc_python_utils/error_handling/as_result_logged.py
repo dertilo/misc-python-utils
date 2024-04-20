@@ -30,7 +30,7 @@ def as_result_logged(
 ) -> Callable[[Callable[P, R]], Callable[P, Result[R, TBE]]]:
     """
     key-idea: results as_result is not working with beartype and not logging errors!
-     -> instead of silenctly catching exceptions, we log them!
+     -> instead of silently catching exceptions, we log them!
     based on: https://github.com/rustedpy/result/blob/021d9945f9cad12eb49386691d933c6688ac89a9/src/result/result.py#L439
     :exceptions: exceptions to catch and turn into ``Err(exc)``.
     :panic_exceptions: exceptions to catch and re-raise.

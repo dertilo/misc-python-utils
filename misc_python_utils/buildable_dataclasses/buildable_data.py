@@ -5,7 +5,7 @@ from abc import ABC, abstractmethod
 from collections.abc import Iterable, Iterator
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
-from typing import Annotated, Any, ClassVar, TypeVar
+from typing import Annotated, ClassVar, TypeVar
 
 from beartype.vale import Is
 from slugify import slugify
@@ -146,7 +146,7 @@ class BuildableDataClasses(BuildableData, IterableDataClasses[SomeDataclass]):
     def _generate_dataclasses(self) -> Iterator[SomeDataclass]:
         raise NotImplementedError
 
-    def _build_data(self) -> Any:
+    def _build_data(self) -> None:
         Path(self.data_dir).mkdir(parents=True, exist_ok=True)
         write_jsonl(
             self.jsonl_file,

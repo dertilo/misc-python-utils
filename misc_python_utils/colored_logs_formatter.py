@@ -34,7 +34,7 @@ class CustomFormatter(logging.Formatter):
 def prepare_logger(
     namespaces: str | list[str] | None = None,
     log_level: int = logging.DEBUG,
-    namespaces2loglevel: dict[tuple[str, ...], int] = None,  # noqa: RUF013
+    namespaces2loglevel: dict[tuple[str, ...] | str, int] = None,  # noqa: RUF013
 ) -> None:
     if namespaces2loglevel is None:
         if isinstance(namespaces, str):
@@ -48,6 +48,8 @@ def prepare_logger(
     root_logger.handlers.clear()
     root_logger.addHandler(ch)
     for logger_names, log_level in namespaces2loglevel.items():
+        if isinstance(logger_names, str):
+            logger_names = (logger_names,)  # noqa: PLW2901
         for ns in logger_names:
             logger = logging.getLogger(ns)
             logger.setLevel(log_level)

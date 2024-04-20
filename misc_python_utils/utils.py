@@ -118,6 +118,14 @@ def just_try(  # noqa: C901, PLR0913, WPS231
     return out
 
 
+TIn = TypeVar("TIn")
+TOut = TypeVar("TOut")
+
+
+def maybe(val: TIn | None, fun: Callable[[TIn], TOut]) -> TOut | None:
+    return None if val is None else fun(val)
+
+
 def slugify_with_underscores(s: str) -> str:
     regex_pattern_to_allow_underscores = r"[^-a-z0-9_]+"
     return slugify(s, regex_pattern=regex_pattern_to_allow_underscores)

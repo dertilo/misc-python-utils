@@ -18,6 +18,9 @@ from misc_python_utils.error_handling.exception_as_err import (
 
 # -----------------------------------------------------------------------------------
 
+BAD_NUMBER = 3
+BAD_NUMBER_ERROR_STR = "don't like this!"
+
 
 def test_exception_as_err_logged() -> None:
     assert fun_with_result(2) == Ok(0.5)
@@ -25,15 +28,30 @@ def test_exception_as_err_logged() -> None:
         fun_with_result(0).err(),
         ZeroDivisionError,
     )  # should spam your logs with the zero-division-error!
-    assert isinstance(fun_with_result(3).err(), str)  # is NOT spamming your logs
+    with pytest.raises(BeartypeCallHintParamViolation):
+        fun_with_result("bad-param")
+    assert (
+        fun_with_result(BAD_NUMBER).err() == BAD_NUMBER_ERROR_STR
+    )  # is NOT spamming your logs
 
 
-@exceptions_as_err_logged(Exception)
+@exceptions_as_err_logged(Exception, panic_exceptions={BeartypeCallHintParamViolation})
 def fun_with_result(x: int) -> Result[float, str]:  # noqa: ARG001
     shit_might_happen = 1 / x
-    if x == 3:  # noqa: PLR2004
-        return Err("don't like this!")
+    if x == BAD_NUMBER:  # noqa: PLR2004
+        return Err(BAD_NUMBER_ERROR_STR)
     return Ok(shit_might_happen)
+
+
+# -----------------------------------------------------------------------------------
+def test_wrong_expections():  # noqa: ANN201
+    with pytest.raises(ValueError):  # noqa: PT011
+        exceptions_as_err_logged(
+            ZeroDivisionError,
+            panic_exceptions={BeartypeCallHintParamViolation},
+        )
+    with pytest.raises(TypeError):
+        exceptions_as_err_logged(BaseException)
 
 
 # -----------------------------------------------------------------------------------
