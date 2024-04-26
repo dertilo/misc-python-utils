@@ -39,7 +39,7 @@ class BuildableBehavior(ABC, Generic[TBuildable]):
         pass
 
 
-@dataclass(slots=True)
+@dataclass
 class DefaultBuildableBehavior(BuildableBehavior):
     def it_is_ready(self, obj: TBuildable) -> bool:
         return obj._was_built  # noqa: SLF001

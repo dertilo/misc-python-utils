@@ -80,7 +80,10 @@ try:  # noqa: WPS229
     NpFloat32Dim1 = Annotated[NDArray[float32], is_1_dimensional]
     NpInt16Dim1 = Annotated[NDArray[int16], is_1_dimensional]
 
+    NpIntDim1 = Annotated[NDArray[int], IsAttr[NDIM, IsEqual[1]]]
+    NeNpIntDim1 = Annotated[NpIntDim1, Is[firstdim_nonempty]]
     NeNpInt16Dim1 = Annotated[NpInt16Dim1, Is[firstdim_nonempty]]
+
     NeNpFloatDim1 = Annotated[NpFloatDim1, Is[firstdim_nonempty]]
     NeNpFloat32Dim1 = Annotated[NpFloat32Dim1, Is[firstdim_nonempty]]
 

@@ -28,7 +28,7 @@ class ContainerBuilder(BuildableBehavior[TBuildableContainer]):
 TElement = TypeVar("TElement")
 
 
-@dataclass(slots=True)
+@dataclass
 class BuildableContainer(Buildable, Iterable[TElement]):
     data: Container
     buildable_behavior: ClassVar[ContainerBuilder] = ContainerBuilder()
