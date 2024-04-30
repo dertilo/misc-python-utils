@@ -111,7 +111,7 @@ def _node_dependencies_from_dict(
     if "_target_" in obj.keys():
         node = MermaidNode(
             str(obj["_id_"]),
-            # node_name=obj.get("name", None), # make DAG too complex!
+            # node_name=obj.get("name", None), # make DAG too complex! cause names are very very long and redundant
             full_module_name=obj["_target_"],
             params={
                 k: d[k] for k in params

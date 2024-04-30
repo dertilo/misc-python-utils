@@ -8,6 +8,8 @@ from dataclasses import dataclass, fields
 from time import time
 from typing import ClassVar, Generic, TypeVar, final
 
+from typing_extensions import Self
+
 from misc_python_utils.dataclass_utils import (
     MaybeEnforcedSlots,
     all_undefined_must_be_filled,
@@ -79,8 +81,8 @@ class Buildable(MaybeEnforcedSlots):
 
     @final  # does not enforce it but at least the IDE warns you!
     def build(
-        self: TBuildable,
-    ) -> TBuildable:  # TODO: Self here?
+        self,
+    ) -> Self:  # TODO: Self here?
         """
         should NOT be overwritten!
         """

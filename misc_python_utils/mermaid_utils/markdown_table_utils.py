@@ -5,6 +5,8 @@ from typing import Any
 from misc_python_utils.beartypes import NeList, NeStr
 from misc_python_utils.dict_utils import _NOT_EXISTING
 
+# TODO: move this elsewhere! it is not realated to mermaid-stuff!
+
 
 def format_table_cell(v: float | Any, formatt: str = ".2f") -> str:
     if isinstance(v, float):

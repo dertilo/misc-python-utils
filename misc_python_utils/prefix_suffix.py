@@ -1,10 +1,10 @@
 import dataclasses
+import logging
 from dataclasses import dataclass
-from typing import Any, ClassVar, TypeVar
+from typing import ClassVar, TypeVar
 
 from typing_extensions import Self
 
-from misc_python_utils.buildable_dataclasses.buildable import Buildable
 from misc_python_utils.dataclass_utils import UNDEFINED, Undefined
 
 TPrefixSuffix = TypeVar("TPrefixSuffix", bound="PrefixSuffix")
@@ -12,28 +12,33 @@ BASE_PATHES: dict[str, str | TPrefixSuffix] = {}
 BASE_PATHES[
     "pwd"
 ] = "."  # noqa: S105 -> this is a false-positive! pwd does not stand for "password" but the "current path"
+BASE_PATHES[
+    "<are_assigned>"
+] = "False"  # somehow hacky way to confirm that BASE_PATHES are assigned
+
+logger = logging.getLogger(__name__)
 
 
-@dataclass(slots=True)
-class PrefixSuffix(Buildable):
+@dataclass
+class PrefixSuffix:
     prefix_key: str | Undefined = UNDEFINED
     suffix: str | Undefined = UNDEFINED
 
     prefix: str = dataclasses.field(init=False)
     __exclude_from_hash__: ClassVar[list[str]] = ["prefix"]
 
-    def _build_self(self) -> Any:
+    def build(self) -> Self:
+        logger.warning(f"don't call build on {self.__class__.__name__} -> DEPRECATED!")
         """
         more lazy than post_init, "builds" prefix, only needed in case one newer calls str()
         """
-        self._set_prefix()
         return self
 
     def __repr__(self) -> str:
         """
         base_path may not exist no constraints here!
         """
-        if self.prefix_key in BASE_PATHES:
+        if BASE_PATHES["<are_assigned>"] != "False":
             self._set_prefix()
             repr_ = f"{self.prefix}/{self.suffix}"
         else:

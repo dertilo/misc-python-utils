@@ -71,7 +71,7 @@ class BuildableData(ABC, Buildable):
 
     base_dir: PrefixSuffix = field(
         default_factory=lambda: BASE_PATHES["raw_data"],
-    )  # TODO make this ClassVar[PrefixSuffix]
+    )
     buildable_behavior: ClassVar[DataBuilder] = DataBuilder()
     __serialize_anyhow__: ClassVar[set[str]] = {"name"}
 

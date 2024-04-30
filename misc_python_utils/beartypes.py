@@ -109,8 +109,8 @@ try:  # noqa: WPS229
     NumpyInt16Dim1 = Annotated[NDArray[int16], is_1_dimensional]
     NumpyInt32Dim1 = Annotated[NDArray[int32], is_1_dimensional]
 
-except ImportError:
-    pass
+except ImportError as e:
+    logger.warning(f"{e}")
 T = TypeVar("T")
 
 NeStr = Annotated[str, Is[lambda s: len(s) > 0]]
