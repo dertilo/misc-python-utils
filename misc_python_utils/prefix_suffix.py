@@ -61,6 +61,7 @@ class PrefixSuffix:
         # assert len(self.prefix) > 0, f"base_path is empty!"
 
     def from_str_same_prefix(self, path: str) -> Self:
+        self._set_prefix()
         assert str(path).startswith(self.prefix)
         file_suffix = str(path).replace(f"{self.prefix}/", "")
         return PrefixSuffix(self.prefix_key, file_suffix)
