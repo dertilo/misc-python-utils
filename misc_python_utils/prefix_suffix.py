@@ -56,15 +56,15 @@ class PrefixSuffix:
             repr_ = this_is_only_used_for_hashing
         return repr_
 
-    def _set_prefix(self) -> None:
-        self.prefix = BASE_PATHES[self.prefix_key]
-        # assert len(self.prefix) > 0, f"base_path is empty!"
-
     def from_str_same_prefix(self, path: str) -> Self:
         self._set_prefix()
         assert str(path).startswith(self.prefix)
         file_suffix = str(path).replace(f"{self.prefix}/", "")
         return PrefixSuffix(self.prefix_key, file_suffix)
+
+    def _set_prefix(self) -> None:
+        self.prefix = BASE_PATHES[self.prefix_key]
+        # assert len(self.prefix) > 0, f"base_path is empty!"
 
     def __hash__(self):
         return hash(repr(self))
