@@ -93,8 +93,11 @@ class MaybeEnforcedSlots:
 @dataclasses.dataclass
 class FixedDict:
     """
-    workaround cause slots and multi-inheritance don't work together
+    motivation: dataclasses do have a __dict__ attribute where you can assign dynamically whatever you want
+    inheriting from this class will prevent that!
 
+    why not using slots=True
+    it is workaround cause slots and multi-inheritance don't work together
     """
 
     _pseudo_slots: tuple[str, ...] = dataclasses.field(init=False, repr=False)

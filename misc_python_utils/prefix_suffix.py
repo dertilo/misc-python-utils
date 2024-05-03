@@ -1,5 +1,4 @@
 import dataclasses
-import logging
 from dataclasses import dataclass
 from typing import ClassVar, TypeVar
 
@@ -13,8 +12,6 @@ BASE_PATHES[
     "pwd"
 ] = "."  # noqa: S105 -> this is a false-positive! pwd does not stand for "password" but the "current path"
 
-logger = logging.getLogger(__name__)
-
 
 @dataclass
 class PrefixSuffix:
@@ -23,13 +20,6 @@ class PrefixSuffix:
 
     prefix: str = dataclasses.field(init=False, default=UNDEFINED)
     __exclude_from_hash__: ClassVar[list[str]] = ["prefix"]
-
-    def build(self) -> Self:
-        logger.warning(f"don't call build on {self.__class__.__name__} -> DEPRECATED!")
-        """
-        more lazy than post_init, "builds" prefix, only needed in case one newer calls str()
-        """
-        return self
 
     def __str__(self) -> str:
         self._set_prefix()
