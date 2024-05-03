@@ -53,9 +53,7 @@ def as_result_logged(
         """
         Decorator to turn a function into one that returns a ``Result``.
         """
-        logger = logging.getLogger(
-            f.__module__.replace("_", "."),
-        )  # "The name is potentially a period-separated hierarchical", see: https://docs.python.org/3.10/library/logging.html
+        logger = logging.getLogger(f.__module__)
 
         @functools.wraps(f)
         @nobeartype
