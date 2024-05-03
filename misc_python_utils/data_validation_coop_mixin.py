@@ -5,7 +5,7 @@ from misc_python_utils.dataclass_utils import FixedDict
 
 
 @dataclass
-class CoopMixinBase(FixedDict):
+class DataValidationCoopMixinBase(FixedDict):
     """
     tilo : not sure yet whether this is a good idea!
     subclasses are supposed to implement a _parse_validate_data method AND call super()._parse_validate_data() at the end!
