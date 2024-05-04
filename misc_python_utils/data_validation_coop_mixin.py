@@ -25,7 +25,9 @@ class DataValidationCoopMixinBase(FixedDict):
     """
 
     _validate_call_chain_worked: bool = field(
-        init=False, repr=False, default=False
+        init=False,
+        repr=False,
+        default=False,
     )  # TODO: this does not guarantee that all subclasses were cooperative!
 
     @final
