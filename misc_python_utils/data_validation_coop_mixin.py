@@ -15,8 +15,10 @@ class CoopDataValidationError(Exception):
 @dataclass
 class DataValidationCoopMixinBase(FixedDict):
     """
-    tilo : not sure yet whether this is a good idea!
+    TODO: nice demonstration of cooperative super-calling but not really necessary, see: misc_python_utils/data_validation_mro_mixin.py
     subclasses are supposed to implement a _parse_validate_data method AND call super()._parse_validate_data() at the end!
+    see: https://sorokin.engineer/posts/en/python_super.html
+
     """
 
     _validate_call_chain_worked: bool = field(init=False, repr=False, default=False)
