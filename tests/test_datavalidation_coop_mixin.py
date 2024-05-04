@@ -101,6 +101,10 @@ class NeStartEndAsResult(DataValidationCoopMixinBaseWithResult):
 
 
 def test_datavalidation_coop_mixin_with_result():
+    o = NeStartEndAsResult(1.0, 2.0)
+    r = o.parse_validate_as_result()
+    assert r.is_ok()
+
     o = NeStartEndAsResult(1.0, 0.0)
     r = o.parse_validate_as_result()
     assert r.is_err()
