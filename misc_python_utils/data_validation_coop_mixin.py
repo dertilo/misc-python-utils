@@ -15,13 +15,16 @@ class CoopDataValidationError(Exception):
 @dataclass
 class DataValidationCoopMixinBase(FixedDict):
     """
-    TODO: nice demonstration of cooperative super-calling but not really necessary, see: misc_python_utils/data_validation_mro_mixin.py
+    the cooperative calls to super() are not strictly following the MRO,
+     cause you can call them before, inbetween or after your subclasses-validation code and thereby change the order of validation!
+     misc_python_utils/data_validation_mro_mixin.py strictly follows the MRO -> less flexible
+
     subclasses are supposed to implement a _parse_validate_data method AND call super()._parse_validate_data() at the end!
     see: https://sorokin.engineer/posts/en/python_super.html
 
     """
 
-    _validate_call_chain_worked: bool = field(init=False, repr=False, default=False)
+    _validate_call_chain_worked: bool = field(init=False, repr=False, default=False) # TODO: this does not guarantee that all subclasses were cooperative!
 
     @final
     def __post_init__(self):
