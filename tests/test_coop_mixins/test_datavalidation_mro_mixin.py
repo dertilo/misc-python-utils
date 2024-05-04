@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 import pytest
 
-from misc_python_utils.data_validation_mro_mixin import (
+from misc_python_utils.coop_mixins.data_validation_mro_mixin import (
     DataValidationMROMixin,
     MroDataValidationError,
 )

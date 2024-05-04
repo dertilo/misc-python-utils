@@ -2,7 +2,10 @@ from dataclasses import dataclass
 
 import pytest
 
-from misc_python_utils.from_dict_mro_mixin import FromDictCoopMixin, ToDictCoopMixin
+from misc_python_utils.coop_mixins.from_to_dict_mro_mixin import (
+    FromDictCoopMixin,
+    ToDictCoopMixin,
+)
 
 
 # ----------- following classes are just for testing and show-casing -----------------

@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 import pytest
 
-from misc_python_utils.data_validation_coop_mixin import (
+from misc_python_utils.coop_mixins.data_validation_coop_mixin import (
     CoopDataValidationError,
     DataValidationCoopMixinBase,
     DataValidationCoopMixinBaseWithResult,
@@ -28,20 +28,24 @@ class NeStartEndMs(NeStartEnd):
         self.end = round(self.end * 1000)
         super()._parse_validate_data()
 
+
 @dataclass
 class NotTooLongNeStartEndMs(NeStartEndMs):
-    some_limit:float=7.0
+    some_limit: float = 7.0
 
     def _parse_validate_data(self) -> None:
         super()._parse_validate_data()
-        if self.end-self.start <= self.some_limit:
-            raise CoopDataValidationError(f"{NotTooLongNeStartEndMs.__class__.__name__} complains")
+        if self.end - self.start > self.some_limit:
+            raise CoopDataValidationError(
+                f"{NotTooLongNeStartEndMs.__class__.__name__} complains",
+            )
+
 
 @dataclass
-class UnCooperativeDatum(NeStartEndMs,DataValidationCoopMixinBase):
-
+class UnCooperativeDatum(NeStartEndMs, DataValidationCoopMixinBase):
     def _parse_validate_data(self) -> None:
         pass
+
 
 @dataclass
 class NiceText(DataValidationCoopMixinBase):
@@ -68,7 +72,11 @@ class NeStartEndMsNiceText(NeStartEndMs, NiceText):
 
 def test_datavalidation_coop_mixin():
     NeStartEnd(1.0, 2.0)
-    UnCooperativeDatum(1.0, 2.0) # one cannot enforce being cooperative!
+    with pytest.raises(AssertionError):
+        UnCooperativeDatum(
+            1.0,
+            2.0,
+        )  # in more complex scenarios there might still be some un-cooperative classes that one cannot detect
     with pytest.raises(
         CoopDataValidationError,
         match=f"{NeStartEnd.__class__.__name__} complains",
