@@ -19,6 +19,10 @@ class DataValidationMROMixin(FixedDict, ABC):
 
     @final
     def __post_init__(self):
+        self._loop_over_mro()
+        super().__post_init__()  # for the FixedDict
+
+    def _loop_over_mro(self):
         for cls in self.__class__.__mro__:
             if (
                 issubclass(cls, DataValidationMROMixin)
@@ -28,7 +32,6 @@ class DataValidationMROMixin(FixedDict, ABC):
             else:
                 assert cls == DataValidationMROMixin, f"unexpected class: {cls}"
                 break
-        super().__post_init__()
 
     @abstractmethod
     def _parse_validate_data(self) -> None:
