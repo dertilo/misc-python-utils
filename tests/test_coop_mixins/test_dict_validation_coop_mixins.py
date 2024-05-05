@@ -6,7 +6,7 @@ from misc_python_utils.coop_mixins.data_validation_coop_mixin import (
     CoopDataValidationError,
     DataValidationCoopMixinBase,
 )
-from misc_python_utils.coop_mixins.from_to_dict_mro_mixin import (
+from misc_python_utils.coop_mixins.tofrom_dict_coop_mixin import (
     FromDictCoopMixin,
     ToDictCoopMixin,
 )

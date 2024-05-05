@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 import pytest
 
-from misc_python_utils.coop_mixins.from_to_dict_mro_mixin import (
+from misc_python_utils.coop_mixins.tofrom_dict_coop_mixin import (
     FromDictCoopMixin,
     ToDictCoopMixin,
 )

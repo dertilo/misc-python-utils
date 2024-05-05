@@ -7,7 +7,7 @@ from typing_extensions import Self
 from misc_python_utils.dataclass_utils import FixedDict
 
 
-class CoopDataValidationError(Exception):
+class CoopDataValidationError(ValueError):
     def __init__(self, msg: str):
         super().__init__(msg)
 

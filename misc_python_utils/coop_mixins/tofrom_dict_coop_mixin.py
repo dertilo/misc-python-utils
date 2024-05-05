@@ -54,3 +54,8 @@ class ToDictCoopMixin(FixedDict):
         you are supposed to override this method in your child class
         """
         return {AT_LEAST_SOME_WERE_COOPERATIVE: True}
+
+@dataclass
+class ToFromDictCoopMixin(FromDictCoopMixin, ToDictCoopMixin):
+    pass
+    
