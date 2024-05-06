@@ -1,6 +1,7 @@
-from dataclasses import dataclass, fields
+from dataclasses import Field, dataclass, fields
 from typing import Any, final
 
+from nested_dataclass_serialization.dataclass_serialization_utils import SPECIAL_KEYS
 from typing_extensions import Self
 
 from misc_python_utils.dataclass_utils import FixedDict
@@ -53,9 +54,22 @@ class ToDictCoopMixin(FixedDict):
         """
         you are supposed to override this method in your child class
         """
-        return {AT_LEAST_SOME_WERE_COOPERATIVE: True}
+        return {AT_LEAST_SOME_WERE_COOPERATIVE: True} | {
+            f.name: getattr(self, f.name)
+            for f in fields(self)
+            if included_by_default(f)
+        }
+
+
+def included_by_default(f: Field) -> bool:
+    return (
+        f.init
+        and f.name not in (SPECIAL_KEYS + ["_pseudo_slots"])
+        and not f.name.startswith("_")
+        and f.repr
+    )
+
 
 @dataclass
 class ToFromDictCoopMixin(FromDictCoopMixin, ToDictCoopMixin):
     pass
-    

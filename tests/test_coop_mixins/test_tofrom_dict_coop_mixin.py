@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 import pytest
 
@@ -17,7 +17,7 @@ class TimeStampedLetter:
 
 @dataclass
 class TimeStampedLetters(FromDictCoopMixin, ToDictCoopMixin):
-    time_stamped_letters: list[TimeStampedLetter]
+    time_stamped_letters: list[TimeStampedLetter] = field(repr=False)
 
     @classmethod
     def _from_dict(cls, jsn: dict) -> dict:
@@ -39,7 +39,7 @@ class TimeStampedLetters(FromDictCoopMixin, ToDictCoopMixin):
 
 @dataclass
 class SomeFloat(FromDictCoopMixin, ToDictCoopMixin):
-    value: float
+    value: float = field(repr=False)
 
     @classmethod
     def _from_dict(cls, jsn: dict) -> dict:
