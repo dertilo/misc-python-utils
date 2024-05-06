@@ -122,6 +122,7 @@ T2 = TypeVar("T2")
 NeSequence = Annotated[Sequence[T], Is[lambda x: len(x) > 0]]
 NeList = Annotated[list[T], Is[lambda lst: len(lst) > 0]]
 NeDict = Annotated[dict[T, T2], Is[lambda d: len(d.keys()) > 0]]
+NeTuple = Annotated[tuple[T, T2], Is[lambda tpl: len(tpl) > 0]]
 # NotNone = Annotated[Any, Is[lambda x:x is None]] # TODO: not working!
 
 
