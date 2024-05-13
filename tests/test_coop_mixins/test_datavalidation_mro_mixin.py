@@ -16,7 +16,9 @@ class NeStartEnd(DataValidationMROMixin):
 
     def _parse_validate_data(self) -> None:
         if self.end <= self.start:
-            raise MroDataValidationError(f"{NeStartEnd.__class__.__name__} complains")
+            raise MroDataValidationError(  # noqa: TRY003
+                f"{NeStartEnd.__class__.__name__} complains"  # noqa: COM812, EM102
+            )  # noqa: EM102, TRY003
 
 
 @dataclass
@@ -32,22 +34,24 @@ class NiceText(DataValidationMROMixin):
 
     def _parse_validate_data(self) -> None:
         if "bad" in self.text:
-            raise MroDataValidationError(f"{NiceText.__class__.__name__} complains")
+            raise MroDataValidationError(  # noqa: TRY003
+                f"{NiceText.__class__.__name__} complains"  # noqa: COM812, EM102
+            )  # noqa: EM102, TRY003
 
 
 @dataclass(kw_only=True)
 class NeStartEndMsNiceText(NeStartEndMs, NiceText):
     def _parse_validate_data(self) -> None:
-        if "ugly" in self.text and self.start == 0.123:
-            raise MroDataValidationError(
-                f"{NeStartEndMsNiceText.__class__.__name__} complains",
+        if "ugly" in self.text and self.start == 0.123:  # noqa: PLR2004
+            raise MroDataValidationError(  # noqa: TRY003
+                f"{NeStartEndMsNiceText.__class__.__name__} complains",  # noqa: EM102
             )
 
 
 # -------------------------------------------------------------------------------------
 
 
-def test_datavalidation_mro_mixin():
+def test_datavalidation_mro_mixin():  # noqa: ANN201
     NeStartEnd(1.0, 2.0)
     with pytest.raises(
         MroDataValidationError,

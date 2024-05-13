@@ -17,7 +17,9 @@ class NeStartEnd(DataValidationCoopMixinBase):
 
     def _parse_validate_data(self) -> None:
         if self.end <= self.start:
-            raise CoopDataValidationError(f"{NeStartEnd.__class__.__name__} complains")
+            raise CoopDataValidationError(  # noqa: TRY003
+                f"{NeStartEnd.__class__.__name__} complains"  # noqa: COM812, EM102
+            )  # noqa: EM102, TRY003
         super()._parse_validate_data()
 
 
@@ -36,8 +38,8 @@ class NotTooLongNeStartEndMs(NeStartEndMs):
     def _parse_validate_data(self) -> None:
         super()._parse_validate_data()
         if self.end - self.start > self.some_limit:
-            raise CoopDataValidationError(
-                f"{NotTooLongNeStartEndMs.__class__.__name__} complains",
+            raise CoopDataValidationError(  # noqa: TRY003
+                f"{NotTooLongNeStartEndMs.__class__.__name__} complains",  # noqa: EM102
             )
 
 
@@ -53,16 +55,18 @@ class NiceText(DataValidationCoopMixinBase):
 
     def _parse_validate_data(self) -> None:
         if "bad" in self.text:
-            raise CoopDataValidationError(f"{NiceText.__class__.__name__} complains")
+            raise CoopDataValidationError(  # noqa: TRY003
+                f"{NiceText.__class__.__name__} complains"  # noqa: COM812, EM102
+            )
         super()._parse_validate_data()
 
 
 @dataclass(kw_only=True)
 class NeStartEndMsNiceText(NeStartEndMs, NiceText):
     def _parse_validate_data(self) -> None:
-        if "ugly" in self.text and self.start == 0.123:
-            raise CoopDataValidationError(
-                f"{NeStartEndMsNiceText.__class__.__name__} complains",
+        if "ugly" in self.text and self.start == 0.123:  # noqa: PLR2004
+            raise CoopDataValidationError(  # noqa: TRY003
+                f"{NeStartEndMsNiceText.__class__.__name__} complains",  # noqa: EM102
             )
         super()._parse_validate_data()
 
@@ -70,7 +74,7 @@ class NeStartEndMsNiceText(NeStartEndMs, NiceText):
 # -------------------------------------------------------------------------------------
 
 
-def test_datavalidation_coop_mixin():
+def test_datavalidation_coop_mixin():  # noqa: ANN201
     NeStartEnd(1.0, 2.0)
     with pytest.raises(AssertionError):
         UnCooperativeDatum(
@@ -122,14 +126,16 @@ class NeStartEndAsResult(DataValidationCoopMixinBaseWithResult):
 
     def _parse_validate_data(self) -> None:
         if self.end <= self.start:
-            raise CoopDataValidationError(f"{self.end=} <= {self.start=}")
+            raise CoopDataValidationError(  # noqa: TRY003
+                f"{self.end=} <= {self.start=}"  # noqa: COM812, EM102
+            )  # noqa: EM102, TRY003
         super()._parse_validate_data()
 
 
 # -------------------------------------------------------------------------------------
 
 
-def test_datavalidation_coop_mixin_with_result():
+def test_datavalidation_coop_mixin_with_result() -> None:
     o = NeStartEndAsResult(1.0, 2.0)
     r = o.parse_validate_as_result()
     assert r.is_ok()

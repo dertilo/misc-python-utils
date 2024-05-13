@@ -84,7 +84,7 @@ class BuildableData(ABC, Buildable):
         return PrefixSuffix(
             self.base_dir.prefix_key,
             f"{self.base_dir.suffix}/{self.name}",
-        ).build()
+        )
 
     @property
     @abstractmethod

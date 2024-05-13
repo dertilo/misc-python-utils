@@ -81,8 +81,8 @@ class Buildable(MaybeEnforcedSlots):
 
     @final  # does not enforce it but at least the IDE warns you!
     def build(
-        self,
-    ) -> Self:  # TODO: Self here?
+        self: Self,
+    ) -> Self:
         """
         should NOT be overwritten!
         """

@@ -25,7 +25,7 @@ class FooBar(Bar, Foo):
     pass
 
 
-def test_fixed_dict():
+def test_fixed_dict():  # noqa: ANN201
     foo = FooBar(1, "foo", "bar")
     with pytest.raises(AttributeError):
         foo.dings = "dings"

@@ -20,7 +20,9 @@ class A(FromDictCoopMixin, ToDictCoopMixin, DataValidationCoopMixinBase):
 
     def _parse_validate_data(self) -> None:
         if self.a < 0.0:
-            raise CoopDataValidationError(f"{self.__class__.__name__} complains")
+            raise CoopDataValidationError(  # noqa: TRY003
+                f"{self.__class__.__name__} complains"  # noqa: COM812, EM102
+            )  # noqa: EM102, TRY003
         super()._parse_validate_data()
 
     @classmethod
@@ -37,7 +39,9 @@ class B(FromDictCoopMixin, ToDictCoopMixin, DataValidationCoopMixinBase):
 
     def _parse_validate_data(self) -> None:
         if self.b < 0.0:
-            raise CoopDataValidationError(f"{self.__class__.__name__} complains")
+            raise CoopDataValidationError(  # noqa: TRY003
+                f"{self.__class__.__name__} complains"  # noqa: COM812, EM102
+            )  # noqa: EM102, TRY003
         super()._parse_validate_data()
 
     @classmethod
@@ -54,7 +58,9 @@ class C(A, B, DataValidationCoopMixinBase):
 
     def _parse_validate_data(self) -> None:
         if self.c < 0.0:
-            raise CoopDataValidationError(f"{self.__class__.__name__} complains")
+            raise CoopDataValidationError(  # noqa: TRY003
+                f"{self.__class__.__name__} complains"  # noqa: COM812, EM102
+            )  # noqa: EM102, TRY003
         super()._parse_validate_data()
 
     @classmethod
@@ -68,21 +74,21 @@ class C(A, B, DataValidationCoopMixinBase):
 # -------------------------------------------------------------------------------------
 
 
-def test_from_to_dict_coop_mixin():
+def test_from_to_dict_coop_mixin():  # noqa: ANN201
     jsn = {
         "a": "1a2",
         "b": "3b4",
         "c": "5c6",
     }
     obj = C.from_dict(jsn)
-    assert obj.a == 1.2
-    assert obj.b == 3.4
-    assert obj.c == 5.6
+    assert obj.a == 1.2  # noqa: PLR2004
+    assert obj.b == 3.4  # noqa: PLR2004
+    assert obj.c == 5.6  # noqa: PLR2004
 
     assert obj.to_dict() == jsn
 
 
-def test_from_to_dict_coop_mixin_data_violations():
+def test_from_to_dict_coop_mixin_data_violations():  # noqa: ANN201
     with pytest.raises(
         CoopDataValidationError,
         match=f"{A.__name__} complains",
@@ -110,7 +116,9 @@ class CparsingAB(A, B, DataValidationCoopMixinBase):
             self.b = -self.b
 
         if self.c < 0.0:
-            raise CoopDataValidationError(f"{self.__class__.__name__} complains")
+            raise CoopDataValidationError(  # noqa: TRY003
+                f"{self.__class__.__name__} complains"  # noqa: COM812, EM102
+            )  # noqa: EM102, TRY003
         super()._parse_validate_data()
 
     @classmethod
@@ -124,8 +132,8 @@ class CparsingAB(A, B, DataValidationCoopMixinBase):
 # -------------------------------------------------------------------------------------
 
 
-def test_CparsingAB():
+def test_CparsingAB():  # noqa: ANN201
     obj = CparsingAB.from_dict({"a": "-1a2", "b": "-3b4", "c": "5c6"})
-    assert (
-        obj.a == 1.2 and obj.b == 3.4 and obj.c == 5.6
+    assert (  # noqa: PT018
+        obj.a == 1.2 and obj.b == 3.4 and obj.c == 5.6  # noqa: PLR2004
     )  # because CparsingAB parsed a and b

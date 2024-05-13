@@ -28,8 +28,7 @@ class FromDictCoopMixin(FixedDict):
             for f in fields(cls)
             if f.init and f.name in parsed_jsn.keys()
         }
-        o = cls(**just_known_kwargs)
-        return o
+        return cls(**just_known_kwargs)
 
     @classmethod
     def _from_dict(cls, jsn: dict) -> dict:
@@ -64,7 +63,7 @@ class ToDictCoopMixin(FixedDict):
 def included_by_default(f: Field) -> bool:
     return (
         f.init
-        and f.name not in (SPECIAL_KEYS + ["_pseudo_slots"])
+        and f.name not in (SPECIAL_KEYS + ["_pseudo_slots"])  # noqa: RUF005
         and not f.name.startswith("_")
         and f.repr
     )

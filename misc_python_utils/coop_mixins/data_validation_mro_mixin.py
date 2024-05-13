@@ -22,7 +22,7 @@ class DataValidationMROMixin(FixedDict, ABC):
         self._loop_over_mro()
         super().__post_init__()  # for the FixedDict
 
-    def _loop_over_mro(self):
+    def _loop_over_mro(self) -> None:
         for cls in self.__class__.__mro__:
             if (
                 issubclass(cls, DataValidationMROMixin)

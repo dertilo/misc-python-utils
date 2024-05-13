@@ -75,7 +75,7 @@ class UnCooperativeClass(ToDictCoopMixin):
 # -------------------------------------------------------------------------------------
 
 
-def test_from_to_dict_coop_mixin():
+def test_from_to_dict_coop_mixin():  # noqa: ANN201
     jsn = {
         "text": ["a", "b", "c"],
         "times": [1.0, 2.0, 3.0],

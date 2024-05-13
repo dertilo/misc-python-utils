@@ -37,7 +37,7 @@ def test_wants_non_empty_tuple() -> None:
 
 
 @beartype
-def wants_non_empty_tuple(x: NeTuple[int, ...]):
+def wants_non_empty_tuple(x: NeTuple[int, ...]):  # noqa: ANN201, ARG001
     pass
 
 
@@ -48,5 +48,5 @@ def test_wants_non_empty_sequence() -> None:
 
 
 @beartype
-def wants_non_empty_sequence(x: NeSequence[int]):
+def wants_non_empty_sequence(x: NeSequence[int]):  # noqa: ANN201, ARG001
     pass
