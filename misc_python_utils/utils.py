@@ -140,7 +140,7 @@ def slugify_en_olny(s: str) -> str:
 # https://youtrack.jetbrains.com/issue/PY-60893/PyCharm-does-not-infer-types-for-zip
 G1 = typing.TypeVar("G1")
 G2 = typing.TypeVar("G2")
-tzip = typing.cast(
+tzip = typing.cast(  # TODO: ai que mierda! pyright complains even though pycharm understands it!
     typing.Callable[[list[G1], ...], list[tuple[G1, ...]]],
     partial(zip, strict=True),
 )

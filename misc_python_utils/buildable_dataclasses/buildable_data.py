@@ -1,9 +1,7 @@
-from __future__ import annotations
-
 import logging
 from abc import ABC, abstractmethod
 from collections.abc import Iterable, Iterator
-from dataclasses import asdict, dataclass, field
+from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Annotated, ClassVar, TypeVar
 
@@ -16,7 +14,7 @@ from misc_python_utils.buildable_dataclasses.buildable import (
     BuildableBehavior,
 )
 from misc_python_utils.file_utils.readwrite_files import read_jsonl, write_jsonl
-from misc_python_utils.prefix_suffix import BASE_PATHES, PrefixSuffix
+from misc_python_utils.prefix_suffix import PrefixSuffix
 from misc_python_utils.utils import slugify_en_olny, slugify_with_underscores
 
 logger = logging.getLogger(
@@ -69,10 +67,10 @@ class BuildableData(ABC, Buildable):
 
     """
 
-    base_dir: PrefixSuffix = field(
-        default_factory=lambda: BASE_PATHES["raw_data"],
-    )
-    buildable_behavior: ClassVar[DataBuilder] = DataBuilder()
+    base_dir: PrefixSuffix
+    buildable_behavior: ClassVar[
+        DataBuilder
+    ] = DataBuilder()  # pyright: ignore [reportIncompatibleVariableOverride] ->TODO!
     __serialize_anyhow__: ClassVar[set[str]] = {"name"}
 
     @property
