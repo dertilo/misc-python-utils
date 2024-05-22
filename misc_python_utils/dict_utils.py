@@ -13,10 +13,12 @@ class _NOT_EXISTING(metaclass=Singleton):  # noqa: N801
 NOT_EXISTING = _NOT_EXISTING()
 
 
-def get_dict_paths(d: dict) -> Iterator[list[str]]:
+def get_dict_paths(d: dict[Any, Any]) -> Iterator[list[str]]:
     for k, sd in d.items():
         if isinstance(sd, dict):
-            for sub_k in get_dict_paths(sd):
+            for sub_k in get_dict_paths(
+                sd,
+            ):  # pyright: ignore[reportUnknownArgumentType]
                 yield [k, *sub_k]
         else:
             yield [k]

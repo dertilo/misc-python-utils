@@ -13,7 +13,7 @@ from nested_dataclass_serialization.dataclass_serialization import (
 
 from misc_python_utils.beartypes import Dataclass
 from misc_python_utils.buildable_dataclasses.buildable import Buildable
-from misc_python_utils.dataclass_utils import UNDEFINED, all_undefined_must_be_filled
+from misc_python_utils.dataclass_utils import all_undefined_must_be_filled
 from misc_python_utils.file_utils.readwrite_files import read_file, write_json
 from misc_python_utils.prefix_suffix import PrefixSuffix
 from misc_python_utils.utils import Singleton
@@ -61,7 +61,7 @@ def create_cache_dir_with_hash_suffix(
     )
 
 
-@dataclass
+@dataclass(kw_only=True)
 class HashCachedData(Buildable, ABC):
     """
     based on "CachedData": https://github.com/dertilo/misc-utils/blob/1609ac8c166ef4c6757d2d5daedb90062d81d75e/misc_utils/cached_data.py#L66
@@ -72,8 +72,8 @@ class HashCachedData(Buildable, ABC):
     """
 
     # str for backward compatibility
-    cache_base: PrefixSuffix = UNDEFINED
-    cache_dir: PrefixSuffix = field(
+    cache_base: PrefixSuffix
+    cache_dir: PrefixSuffix | _CREATE_CACHE_DIR_IN_BASE_DIR = field(
         init=False,
         repr=True,
         default=CREATE_CACHE_DIR_IN_BASE_DIR,

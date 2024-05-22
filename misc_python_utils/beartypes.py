@@ -6,10 +6,8 @@ from pathlib import Path
 from typing import Annotated, TypeVar
 
 from beartype import BeartypeConf, BeartypeStrategy, beartype
-from beartype._conf.confcls import BEARTYPE_CONF_DEFAULT
-from beartype._data.hint.datahinttyping import BeartypeableT, BeartypeReturn
 from beartype.roar import BeartypeCallException, BeartypeClawDecorWarning
-from beartype.typing import TYPE_CHECKING
+from beartype.typing import TypeAlias
 from beartype.vale import Is, IsAttr, IsEqual
 
 logger = logging.getLogger(
@@ -38,18 +36,18 @@ def bear_does_roar(roar_trigger_fun: Callable) -> bool:
 
 assert bear_does_roar(lambda: BearBully(""))
 
-if TYPE_CHECKING or not __debug__:
-    logger.warning("you disabled beartype!")
+# if TYPE_CHECKING or not __debug__:
+#     logger.warning("you disabled beartype!")
 
-    def nobeartype(  # type: ignore[no-redef]
-        obj: BeartypeableT,
-        *,
-        conf: BeartypeConf = BEARTYPE_CONF_DEFAULT,  # noqa: ARG001
-    ) -> BeartypeReturn:
-        return obj
+#     def nobeartype(  # type: ignore[no-redef]
+#         obj: BeartypeableT,
+#         *,
+#         conf: BeartypeConf = BEARTYPE_CONF_DEFAULT,  # noqa: ARG001
+#     ) -> BeartypeReturn:
+#         return obj
 
-else:
-    nobeartype = beartype(conf=BeartypeConf(strategy=BeartypeStrategy.O0))
+# else:
+nobeartype = beartype(conf=BeartypeConf(strategy=BeartypeStrategy.O0))
 
 File = Annotated[
     str,
@@ -114,7 +112,7 @@ except ImportError as e:
 T = TypeVar("T")
 
 NeStr = Annotated[str, Is[lambda s: len(s) > 0]]
-Dataclass = Annotated[object, Is[lambda o: dataclasses.is_dataclass(o)]]
+Dataclass = Annotated[object, Is[dataclasses.is_dataclass]]
 # StrOrBytesInstance = Annotated[object, IsInstance[str]]
 
 T2 = TypeVar("T2")
@@ -122,7 +120,7 @@ T2 = TypeVar("T2")
 NeSequence = Annotated[Sequence[T], Is[lambda x: len(x) > 0]]
 NeList = Annotated[list[T], Is[lambda lst: len(lst) > 0]]
 NeDict = Annotated[dict[T, T2], Is[lambda d: len(d.keys()) > 0]]
-NeTuple = Annotated[tuple[T, T2], Is[lambda tpl: len(tpl) > 0]]
+NeTuple: TypeAlias = Annotated[tuple[T, ...], Is[lambda tpl: len(tpl) > 0]]
 # NotNone = Annotated[Any, Is[lambda x:x is None]] # TODO: not working!
 
 

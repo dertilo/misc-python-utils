@@ -5,6 +5,7 @@ from beartype import beartype
 from beartype.roar import BeartypeCallHintParamViolation
 
 from misc_python_utils.beartypes import Dataclass, NeSequence, NeTuple
+from misc_python_utils.utils import PythonBuiltinData
 
 
 @dataclass
@@ -25,8 +26,8 @@ def test_is_dataclass() -> None:
 @beartype
 def fun_want_dataclass(
     obj: Dataclass,
-) -> str:
-    return obj.foo
+) -> None:
+    return None
 
 
 def test_wants_non_empty_tuple() -> None:
@@ -37,7 +38,7 @@ def test_wants_non_empty_tuple() -> None:
 
 
 @beartype
-def wants_non_empty_tuple(x: NeTuple[int, ...]):  # noqa: ANN201, ARG001
+def wants_non_empty_tuple(x: NeTuple[int]):  # noqa: ANN201, ARG001
     pass
 
 
@@ -49,4 +50,17 @@ def test_wants_non_empty_sequence() -> None:
 
 @beartype
 def wants_non_empty_sequence(x: NeSequence[int]):  # noqa: ANN201, ARG001
+    pass
+
+
+def test_wants_builtin() -> None:
+    with pytest.raises(BeartypeCallHintParamViolation):
+        wants_builtin(SomeClass())  # type: ignore
+    wants_builtin((1, 2, "foo"))
+    wants_builtin((1, 2, 3))
+    wants_builtin({1, 2, 3})
+
+
+@beartype
+def wants_builtin(x: PythonBuiltinData):  # noqa: ANN201, ARG001
     pass

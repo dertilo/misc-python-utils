@@ -20,9 +20,9 @@ logger = logging.getLogger(
 
 
 JsonLoadsOutput = (
-    dict | list | str | int | float | bool | None
+    dict[str, Any] | list[Any] | str | int | float | bool | None
 )  # forgot anything? set  cannot be handled by json
-PythonBuiltinData = JsonLoadsOutput | tuple | set
+PythonBuiltinData = JsonLoadsOutput | tuple[Any, ...] | set[Any]
 
 T = TypeVar("T")
 T_default = TypeVar("T_default")

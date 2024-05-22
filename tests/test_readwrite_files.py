@@ -2,6 +2,7 @@ import json
 import os.path
 import shutil
 from collections.abc import Callable, Iterable
+from typing import Any
 
 from misc_python_utils.dict_utils import flatten_nested_dict
 from misc_python_utils.file_utils.readwrite_csv_files import (
@@ -32,7 +33,7 @@ def test_reading_jsonl() -> None:
 # TODO:
 
 
-def test_dict_to_csvs():  # noqa: ANN201
+def test_dict_to_csvs() -> None:
     expected = [
         {"a": 1.2, "b": "foo-2", "k": 2},
         {
@@ -49,8 +50,8 @@ def test_dict_to_csvs():  # noqa: ANN201
 
 def flatten_write_to_csvs(
     directory: str,
-    data: Iterable[dict],
-    get_id_fun: Callable[[dict], str] | None = None,
+    data: Iterable[dict[str, Any]],
+    get_id_fun: Callable[[dict[str, Any]], str] | None = None,
 ) -> None:
     """
     data: iterable of nested dicts
@@ -75,10 +76,8 @@ def flatten_write_to_csvs(
             write_lines(csv_file, [f"{eid}\t{value}"], mode="a")
 
 
-def test_read_csv():  # noqa: ANN201
-    expected_data: list[dict[str, str]] = [
-        {"foo": f"foo-{k}", "bar": k} for k in range(3)
-    ]
+def test_read_csv() -> None:
+    expected_data = [{"foo": f"foo-{k}", "bar": k} for k in range(3)]
     header = ["foo", "bar"]
     test_file = "/tmp/test.csv"  # noqa: S108
     write_csv(
@@ -90,10 +89,8 @@ def test_read_csv():  # noqa: ANN201
     assert data == expected_data
 
 
-def test_write_dicts_to_csv():  # noqa: ANN201
-    expected_data: list[dict[str, str]] = [
-        {"foo": f"foo-{k}", "bar": k} for k in range(3)
-    ]
+def test_write_dicts_to_csv() -> None:
+    expected_data = [{"foo": f"foo-{k}", "bar": k} for k in range(3)]
     test_file = "/tmp/test.csv"  # noqa: S108
     write_dicts_to_csv(
         test_file,

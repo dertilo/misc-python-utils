@@ -8,7 +8,6 @@ from misc_python_utils.file_utils.readwrite_files import (
     read_lines,
     write_lines,
 )
-from misc_python_utils.utils import JsonLoadsOutput
 
 
 def write_dicts_to_csv(
@@ -66,7 +65,7 @@ def read_csv(  # noqa: PLR0913
     use_json_loads: bool = True,
     process_row: Callable[[list[Any]], list[Any]] = lambda x: x,
     keys: list[str] | None = None,
-) -> Iterable[dict]:  # TODO: json.loads should recognize int/float
+) -> Iterable[dict[str, Any]]:  # TODO: json.loads should recognize int/float
     lines = read_lines(file_path, encoding=encoding)
     yield from read_csv_lines(
         lines,
@@ -83,10 +82,10 @@ def read_csv_lines(
     use_json_loads: bool = True,
     process_row: Callable[[list[Any]], list[Any]] = lambda x: x,
     keys: list[str] | None = None,
-) -> Iterable[dict]:
+) -> Iterable[dict[str, Any]]:
     if use_json_loads:
 
-        def process_fun(row: list) -> JsonLoadsOutput:
+        def process_fun(row: list[str]) -> list[Any]:
             s = f'[{",".join(row)}]'
             return json.loads(s)
 
