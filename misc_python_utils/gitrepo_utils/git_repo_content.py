@@ -5,9 +5,9 @@ from typing import Any
 
 from misc_python_utils.buildable_dataclasses.buildable_data import (
     BuildableData,
-    NameSlug,
+    CasedNameSlug,
 )
-from misc_python_utils.prefix_suffix import BASE_PATHES, PrefixSuffix
+from misc_python_utils.prefix_suffix import PrefixSuffix
 
 logger = logging.getLogger(
     __name__,
@@ -16,15 +16,15 @@ logger = logging.getLogger(
 
 @dataclass
 class GitRepoContent(BuildableData):
-    git_repo: str = "git@gitlab.cc-asp.orgname.de:group/reponame.git"
-    base_dir: PrefixSuffix = field(default_factory=lambda: BASE_PATHES["raw_data"])
+    git_repo: str  # = "git@gitlab.cc-asp.orgname.de:group/reponame.git"
+    base_dir: PrefixSuffix  # = field(default_factory=lambda: PrefixSuffix("processed_raw_data","GIT_REPOS"))
     do_pull: bool = False
     commit_sha: str | None = field(init=False, repr=True, default=None)
+    name: CasedNameSlug = field(init=False)
 
-    @property
-    def name(self) -> NameSlug:
+    def __post_init__(self):
         repo_name = self.git_repo.split("/")[-1].replace(".git", "").replace("_", "-")
-        return f"{repo_name}-git-repo"
+        self.name = f"{repo_name}-git-repo"
 
     @property
     def _is_data_valid(self) -> bool:

@@ -13,6 +13,7 @@ from nested_dataclass_serialization.dataclass_serialization import (
 
 from misc_python_utils.beartypes import Dataclass
 from misc_python_utils.buildable_dataclasses.buildable import Buildable
+from misc_python_utils.buildable_dataclasses.buildable_data import CasedNameSlug
 from misc_python_utils.dataclass_utils import all_undefined_must_be_filled
 from misc_python_utils.file_utils.readwrite_files import read_file, write_json
 from misc_python_utils.prefix_suffix import PrefixSuffix
@@ -72,6 +73,7 @@ class HashCachedData(Buildable, ABC):
     """
 
     # str for backward compatibility
+    name: CasedNameSlug
     cache_base: PrefixSuffix
     cache_dir: PrefixSuffix | _CREATE_CACHE_DIR_IN_BASE_DIR = field(
         init=False,
@@ -113,15 +115,6 @@ class HashCachedData(Buildable, ABC):
             successfully_loaded_cached = False
 
         return successfully_loaded_cached
-
-    @property
-    @abstractmethod
-    def name(self) -> str:
-        """
-        just to increase cached-data "readability", this is no id! no need to be "unique"
-        enforcing this! readability is user-friendly!
-        """
-        raise NotImplementedError
 
     @abstractmethod
     def _build_cache(self) -> None:

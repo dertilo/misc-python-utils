@@ -71,8 +71,11 @@ class BuildableData(ABC, Buildable):
         - checking if data is valid (_is_data_valid) if so loading it (_load_data)
         - reminding you to implement a "_is_data_valid"- and "_build_data" method
 
+    purging name-properties in favor of "normal" dataclass-field that might be set via __post_init__
+    properties are diabolic anyhow!
     """
 
+    name: CasedNameSlug
     base_dir: PrefixSuffix
     buildable_behavior: ClassVar[
         DataBuilder
@@ -89,11 +92,6 @@ class BuildableData(ABC, Buildable):
             self.base_dir.prefix_key,
             f"{self.base_dir.suffix}/{self.name}",
         )
-
-    @property
-    @abstractmethod
-    def name(self) -> NameSlug:
-        ...
 
     @property
     @abstractmethod
