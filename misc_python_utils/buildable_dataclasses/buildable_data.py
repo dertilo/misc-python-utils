@@ -16,7 +16,7 @@ from misc_python_utils.buildable_dataclasses.buildable import (
 )
 from misc_python_utils.file_utils.readwrite_files import read_jsonl, write_jsonl
 from misc_python_utils.prefix_suffix import PrefixSuffix
-from misc_python_utils.utils import (
+from misc_python_utils.slugifycation import (
     slugify_cased_en_only,
     slugify_en_only,
     slugify_with_underscores,

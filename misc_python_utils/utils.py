@@ -3,14 +3,10 @@ import logging
 import platform
 import sys
 import traceback
-import typing
 from collections.abc import Callable, Iterable
 from dataclasses import dataclass
-from functools import partial
 from hashlib import sha1
 from typing import Any, Generic, TypeVar
-
-from slugify import slugify
 
 _major, minor, _patch = platform.python_version().split(".")
 
@@ -18,11 +14,6 @@ logger = logging.getLogger(
     __name__,
 )  # "The name is potentially a period-separated hierarchical", see: https://docs.python.org/3.10/library/logging.html
 
-
-JsonLoadsOutput = (
-    dict[str, Any] | list[Any] | str | int | float | bool | None
-)  # forgot anything? set  cannot be handled by json
-PythonBuiltinData = JsonLoadsOutput | tuple[Any, ...] | set[Any]  # TODO: redundant see: https://github.com/dertilo/nested-dataclass-serialization/blob/e2a7a97003c1d3b27d0c76e1e3f3ecadca81f75f/nested_dataclass_serialization/dataclass_serialization_utils.py
 
 T = TypeVar("T")
 T_default = TypeVar("T_default")
@@ -128,32 +119,20 @@ def maybe(val: TIn | None, fun: Callable[[TIn], TOut]) -> TOut | None:
     return None if val is None else fun(val)
 
 
-def slugify_with_underscores(s: str) -> str:
-    regex_pattern_to_allow_underscores = r"[^-a-z0-9_]+"
-    return slugify(s, regex_pattern=regex_pattern_to_allow_underscores)
-
-
-def slugify_en_only(s: str) -> str:
-    return slugify(s, regex_pattern=r"[^-a-z0-9]+")
-
-
-def slugify_cased_en_only(s: str) -> str:
-    return slugify(s, regex_pattern=r"[^-a-zA-Z0-9]+", lowercase=False)
-
-
-# https://youtrack.jetbrains.com/issue/PY-60893/PyCharm-does-not-infer-types-for-zip
-G1 = typing.TypeVar("G1")
-G2 = typing.TypeVar("G2")
-tzip = typing.cast(  # TODO: ai que mierda! pyright complains even though pycharm understands it!
-    typing.Callable[[list[G1], ...], list[tuple[G1, ...]]],
-    partial(zip, strict=True),
-)
-tzip_nonstrict = typing.cast(
-    typing.Callable[[list[G1], list[G2]], list[tuple[G1, G2]]],
-    partial(zip, strict=False),
-)
-
-tenumerate = typing.cast(
-    typing.Callable[[Iterable[G1]], Iterable[tuple[int, G1]]],
-    enumerate,
-)
+# nice try but not working with pyright!
+# # https://youtrack.jetbrains.com/issue/PY-60893/PyCharm-does-not-infer-types-for-zip
+# G1 = typing.TypeVar("G1")
+# G2 = typing.TypeVar("G2")
+# tzip = typing.cast(  # TODO: ai que mierda! pyright complains even though pycharm understands it!
+#     typing.Callable[[list[G1], ...], list[tuple[G1, ...]]],
+#     partial(zip, strict=True),
+# )
+# tzip_nonstrict = typing.cast(
+#     typing.Callable[[list[G1], list[G2]], list[tuple[G1, G2]]],
+#     partial(zip, strict=False),
+# )
+#
+# tenumerate = typing.cast(
+#     typing.Callable[[Iterable[G1]], Iterable[tuple[int, G1]]],
+#     enumerate,
+# )

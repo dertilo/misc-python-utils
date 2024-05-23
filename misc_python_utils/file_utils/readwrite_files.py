@@ -1,14 +1,11 @@
-import bz2
 import gzip
 import json
 import locale
-import typing
-from collections import defaultdict
-from collections.abc import Callable, Iterable, Iterator
-from contextlib import contextmanager
-from io import BufferedReader
+from collections.abc import Iterable, Iterator
 from pathlib import Path
-from typing import IO, TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any
+
+from misc_python_utils.file_utils._readwrite_utils import OPEN_METHODS, writable
 
 assert locale.getpreferredencoding(False) == "UTF-8"
 
@@ -92,27 +89,6 @@ def write_lines(
         f.writelines(process_line(l) for l in lines)
 
 
-def writable_it(
-    file: str,
-    mode: str = "w",
-) -> typing.Iterator[IO[bytes] | gzip.GzipFile]:
-    mode += "b"
-    if file.endswith(".gz"):
-        with open(file, mode=mode) as f:  # noqa: SIM117, PTH123
-            # exlcuding timestamp from gzip, see: https://stackoverflow.com/questions/25728472/python-gzip-omit-the-original-filename-and-timestamp
-
-            with gzip.GzipFile(fileobj=f, mode=mode, filename="", mtime=0) as fgz:
-                yield fgz
-    else:
-        with open(file, mode=mode) as f:  # noqa: PTH123
-            yield f
-
-
-writable = contextmanager(
-    writable_it,
-)  # avoid beartype-pyright collision by simply not using this type-shifting decorator black-magic!
-
-
 def read_jsonl(
     file: FilePath,
     encoding: str = "utf-8",
@@ -123,19 +99,6 @@ def read_jsonl(
         yield json.loads(l)
 
 
-mode = "rb"
-
-
-def open_fun_supplier() -> Callable[[str], BufferedReader]:
-    return lambda f: Path(f).open(mode=mode)  # noqa: SIM115
-
-
-OPEN_FUNS = Callable[[str], gzip.GzipFile | bz2.BZ2File | BufferedReader]
-open_methods: dict[str, OPEN_FUNS] = defaultdict(open_fun_supplier)
-open_methods["gz"] = lambda f: gzip.open(f, mode=mode)
-open_methods["bz2"] = lambda f: bz2.open(f, mode=mode)
-
-
 def read_lines(  # noqa: WPS231
     file: FilePath,
     encoding: str = "utf-8",
@@ -144,7 +107,7 @@ def read_lines(  # noqa: WPS231
 ) -> Iterator[str]:
     file = str(file)
 
-    file_io_supplier = open_methods[file.split(".")[-1].lower()]
+    file_io_supplier = OPEN_METHODS[file.split(".")[-1].lower()]
 
     with file_io_supplier(file) as f:
         _ = [next(f) for _ in range(num_to_skip)]

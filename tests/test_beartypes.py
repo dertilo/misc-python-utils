@@ -1,11 +1,14 @@
+# flake8: noqa WPS202
 from dataclasses import dataclass
 
 import pytest
 from beartype import beartype
 from beartype.roar import BeartypeCallHintParamViolation
+from nested_dataclass_serialization.dataclass_serialization_utils import (
+    PythonBuiltinData,
+)
 
 from misc_python_utils.beartypes import Dataclass, NeSequence, NeTuple
-from misc_python_utils.utils import PythonBuiltinData
 
 
 @dataclass
