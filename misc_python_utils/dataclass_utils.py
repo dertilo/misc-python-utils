@@ -90,6 +90,9 @@ class MaybeEnforcedSlots:
             raise AttributeError(msg)
 
 
+PSEUDO_SLOTS = "_pseudo_slots"
+
+
 @dataclasses.dataclass
 class FixedDict:
     """
@@ -109,9 +112,28 @@ class FixedDict:
         """
         to prevent dynamic assignment of unknown/new attributes
         """
-        is_already_initialized = hasattr(self, "_pseudo_slots")
+        is_already_initialized = hasattr(self, PSEUDO_SLOTS)
         if not is_already_initialized or __name in self._pseudo_slots:
             super().__setattr__(__name, __value)
         else:
             msg = f"'{self.__class__.__name__}' object with {self._pseudo_slots=} has no attribute '{__name}'"
             raise AttributeError(msg)
+
+
+@dataclasses.dataclass
+class DataclassDict(dict):
+    def __getitem__(self, __key):  # noqa: ANN001
+        return self.__dict__[__key]
+
+    def __setitem__(self, __key, __value):  # noqa: ANN001
+        self.__dict__[__key] = __value
+
+    def to_dict(self) -> dict:
+        return {k: v for k, v in self.items() if k != PSEUDO_SLOTS}
+
+
+@dataclasses.dataclass
+class DataclassFixedDict(FixedDict, DataclassDict):
+    def __setitem__(self, __key, __value):  # noqa: ANN001
+        setattr(self, __key, __value)
+        self.__dict__[__key] = __value

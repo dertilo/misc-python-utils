@@ -25,7 +25,7 @@ def test_is_dataclass() -> None:
 
 @beartype
 def fun_want_dataclass(
-    obj: Dataclass,
+    obj: Dataclass,  # noqa: ARG001
 ) -> None:
     return None
 
@@ -55,7 +55,7 @@ def wants_non_empty_sequence(x: NeSequence[int]):  # noqa: ANN201, ARG001
 
 def test_wants_builtin() -> None:
     with pytest.raises(BeartypeCallHintParamViolation):
-        wants_builtin(SomeClass())  # type: ignore
+        wants_builtin(SomeClass())  # type: ignore  # noqa: PGH003
     wants_builtin((1, 2, "foo"))
     wants_builtin((1, 2, 3))
     wants_builtin({1, 2, 3})

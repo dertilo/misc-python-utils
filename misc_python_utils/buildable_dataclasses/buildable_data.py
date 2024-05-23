@@ -7,6 +7,7 @@ from typing import Annotated, ClassVar, TypeVar
 
 from beartype.vale import Is
 from slugify import slugify
+from tqdm import tqdm
 
 from misc_python_utils.beartypes import NeStr
 from misc_python_utils.buildable_dataclasses.buildable import (
@@ -15,14 +16,19 @@ from misc_python_utils.buildable_dataclasses.buildable import (
 )
 from misc_python_utils.file_utils.readwrite_files import read_jsonl, write_jsonl
 from misc_python_utils.prefix_suffix import PrefixSuffix
-from misc_python_utils.utils import slugify_en_olny, slugify_with_underscores
+from misc_python_utils.utils import (
+    slugify_cased_en_only,
+    slugify_en_only,
+    slugify_with_underscores,
+)
 
 logger = logging.getLogger(
     __name__,
 )  # "The name is potentially a period-separated hierarchical", see: https://docs.python.org/3.10/library/logging.html
 
 SlugStr = Annotated[NeStr, Is[lambda s: slugify_with_underscores(s) == s]]
-NameSlug = Annotated[NeStr, Is[lambda s: slugify_en_olny(s) == s]]
+NameSlug = Annotated[NeStr, Is[lambda s: slugify_en_only(s) == s]]
+CasedNameSlug = Annotated[NeStr, Is[lambda s: slugify_cased_en_only(s) == s]]
 
 
 def is_cased_sluggy(s: NeStr) -> bool:
@@ -150,7 +156,10 @@ class BuildableDataClasses(BuildableData, IterableDataClasses[SomeDataclass]):
             self.jsonl_file,
             (
                 dc.to_dict() if hasattr(dc, "to_dict") else asdict(dc)
-                for dc in self._generate_dataclasses()
+                for dc in tqdm(
+                    self._generate_dataclasses(),
+                    desc=f"building {self.name}",
+                )
             ),
         )
         # write_file(f"{self.data_dir}/dag.html", mermaid_html_dag(self)) # TODO: cannot simply put this here cause almost always git repo is not clean which would throw exception here

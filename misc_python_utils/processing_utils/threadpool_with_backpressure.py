@@ -3,6 +3,8 @@ from concurrent import futures as cf
 from concurrent.futures import FIRST_COMPLETED, Future, wait
 from typing import TypeVar
 
+from misc_python_utils.processing_utils.processing_utils import iterable_to_batches
+
 Tin = TypeVar("Tin")
 Tout = TypeVar("Tout")
 
@@ -12,13 +14,15 @@ POISON_PILL = "<POISON_PILL>"
 def process_with_threadpool_backpressure(
     process_batch_fun: Callable[[list[Tin]], Tout],
     data: Iterable,
-    max_workers: int = 1,  # noqa: ANN001
+    max_workers: int = 1,
+    batch_size: int = 1,
 ) -> Iterator[Tout]:
     # TODO: stupid multiprocessing Pool does not know back-pressure!!!
     # see: https://stackoverflow.com/questions/30448267/multiprocessing-pool-imap-unordered-with-fixed-queue-size-or-buffer
     # TODO: not yet tested!
 
     it = iter(data)
+    it = iter(iterable_to_batches(data, batch_size=batch_size))
 
     with cf.ThreadPoolExecutor(max_workers=max_workers) as executor:
 

@@ -22,7 +22,7 @@ logger = logging.getLogger(
 JsonLoadsOutput = (
     dict[str, Any] | list[Any] | str | int | float | bool | None
 )  # forgot anything? set  cannot be handled by json
-PythonBuiltinData = JsonLoadsOutput | tuple[Any, ...] | set[Any]
+PythonBuiltinData = JsonLoadsOutput | tuple[Any, ...] | set[Any]  # TODO: redundant see: https://github.com/dertilo/nested-dataclass-serialization/blob/e2a7a97003c1d3b27d0c76e1e3f3ecadca81f75f/nested_dataclass_serialization/dataclass_serialization_utils.py
 
 T = TypeVar("T")
 T_default = TypeVar("T_default")
@@ -133,8 +133,12 @@ def slugify_with_underscores(s: str) -> str:
     return slugify(s, regex_pattern=regex_pattern_to_allow_underscores)
 
 
-def slugify_en_olny(s: str) -> str:
+def slugify_en_only(s: str) -> str:
     return slugify(s, regex_pattern=r"[^-a-z0-9]+")
+
+
+def slugify_cased_en_only(s: str) -> str:
+    return slugify(s, regex_pattern=r"[^-a-zA-Z0-9]+", lowercase=False)
 
 
 # https://youtrack.jetbrains.com/issue/PY-60893/PyCharm-does-not-infer-types-for-zip

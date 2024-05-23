@@ -7,7 +7,6 @@ from typing import Annotated, TypeVar
 
 from beartype import BeartypeConf, BeartypeStrategy, beartype
 from beartype.roar import BeartypeCallException, BeartypeClawDecorWarning
-from beartype.typing import TypeAlias
 from beartype.vale import Is, IsAttr, IsEqual
 
 logger = logging.getLogger(
@@ -120,7 +119,9 @@ T2 = TypeVar("T2")
 NeSequence = Annotated[Sequence[T], Is[lambda x: len(x) > 0]]
 NeList = Annotated[list[T], Is[lambda lst: len(lst) > 0]]
 NeDict = Annotated[dict[T, T2], Is[lambda d: len(d.keys()) > 0]]
-NeTuple: TypeAlias = Annotated[tuple[T, ...], Is[lambda tpl: len(tpl) > 0]]
+NeTuple = Annotated[
+    tuple[T, ...], Is[lambda tpl: len(tpl) > 0]  # noqa: COM812
+]  # typing.TypeAlias currently unsupported by @beartype
 # NotNone = Annotated[Any, Is[lambda x:x is None]] # TODO: not working!
 
 

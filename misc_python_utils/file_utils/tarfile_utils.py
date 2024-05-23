@@ -7,6 +7,8 @@ from pathlib import Path
 
 from tqdm import tqdm
 
+from misc_python_utils.prefix_suffix import PrefixSuffix
+
 logger = logging.getLogger(
     __name__,
 )  # "The name is potentially a period-separated hierarchical", see: https://docs.python.org/3.10/library/logging.html
@@ -19,17 +21,17 @@ class TarFileOutput:
 
 
 def filter_gen_targz_members(
-    targz_file: str,
+    targz_file: str | PrefixSuffix,
     is_of_interest_fun: Callable[[tarfile.TarInfo], bool],
     start: int | None = None,
     stop: int | None = None,
+    verbose: bool = False,
 ) -> Iterator[TarFileOutput]:
-    with tarfile.open(targz_file, "r:gz") as tar:
-        for member in tqdm(
-            itertools.islice(tar, start, stop),
-            position=0,
-            desc=f"iterating over {Path(targz_file).name}",
-        ):
+    with tarfile.open(str(targz_file), "r:gz") as tar:
+        g = itertools.islice(tar, start, stop)
+        if verbose:
+            g = tqdm(g, position=0, desc=f"iterating over {Path(str(targz_file)).name}")
+        for member in g:
             member: tarfile.TarInfo
             if is_of_interest_fun(member):
                 f: tarfile.ExFileObject | None = tar.extractfile(member)
