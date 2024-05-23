@@ -7,7 +7,6 @@ from typing import Annotated, ClassVar, TypeVar
 
 from beartype.vale import Is
 from slugify import slugify
-from tqdm import tqdm
 
 from misc_python_utils.beartypes import NeStr
 from misc_python_utils.buildable_dataclasses.buildable import (
@@ -154,10 +153,7 @@ class BuildableDataClasses(BuildableData, IterableDataClasses[SomeDataclass]):
             self.jsonl_file,
             (
                 dc.to_dict() if hasattr(dc, "to_dict") else asdict(dc)
-                for dc in tqdm(
-                    self._generate_dataclasses(),
-                    desc=f"building {self.name}",
-                )
+                for dc in self._generate_dataclasses()
             ),
         )
         # write_file(f"{self.data_dir}/dag.html", mermaid_html_dag(self)) # TODO: cannot simply put this here cause almost always git repo is not clean which would throw exception here
