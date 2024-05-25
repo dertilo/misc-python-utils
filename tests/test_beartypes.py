@@ -72,13 +72,11 @@ def wants_builtin(x: PythonBuiltinData):  # noqa: ANN201, ARG001
 
 
 def test_wants_1d_numpy_array() -> None:
-    with pytest.raises(BeartypeCallHintParamViolation):
+    with pytest.raises(BeartypeCallHintParamViolation):  # noqa: PT012
         array = np.array([1, 2, 3])
-        print(f"{array.shape=}")
         wants_1d_np_array_len_3(array)
-    with pytest.raises(BeartypeCallHintParamViolation):
+    with pytest.raises(BeartypeCallHintParamViolation):  # noqa: PT012
         array = np.array([[1, 2, 3]])
-        print(f"{array.shape=}")
         wants_1d_np_array_len_3(array)
     wants_1d_np_array_len_3(np.array([1.0, 2.0, 3.0]))
 
