@@ -32,7 +32,8 @@ def get_dict_paths(d: Mapping[str, MappingOrAny]) -> Iterator[list[str]]:
 
 
 def get_val_from_nested_dict(
-    d: Mapping[str, MappingOrAny], path: list[str],
+    d: Mapping[str, MappingOrAny],
+    path: list[str],
 ) -> Any | _NOT_EXISTING:
     value: MappingOrAny | _NOT_EXISTING = NOT_EXISTING  # declaring MappingOrAny here kind of hints towards a recursive type
     for key in path:
