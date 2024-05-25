@@ -3,7 +3,7 @@ import logging
 import warnings
 from collections.abc import Callable, Sequence
 from pathlib import Path
-from typing import Annotated, TypeVar
+from typing import Annotated, Any, Protocol, TypeVar
 
 from beartype import BeartypeConf, BeartypeStrategy, beartype
 from beartype.roar import BeartypeCallException, BeartypeClawDecorWarning
@@ -16,6 +16,11 @@ logger = logging.getLogger(
 
 warnings.simplefilter("error", category=BeartypeClawDecorWarning)
 # turns beartype-warning into an error, cause otherwise beartype might be unable to validate function input/output types, if one of thm is invalid
+
+#  pyright: reportUnknownLambdaType=false
+#  pyright: reportUnknownMemberType=false
+#  pyright: reportUnknownVariableType=false
+#  pyright: reportUnknownArgumentType=false
 
 
 @dataclasses.dataclass
@@ -61,23 +66,32 @@ Directory = Annotated[str, Is[lambda f: Path(f).is_dir()]]
 NDIM = "ndim"
 is_1_dimensional = IsAttr[NDIM, IsEqual[1]]
 
+
+class HasShapeP(Protocol):
+    shape: tuple[int, ...]
+
+
 try:  # noqa: WPS229
-    # TODO: looks somewhat ugly!
-    from numpy import float32, floating, int16, int32, number
+    # see: https://beartype.readthedocs.io/en/latest/api_vale/#api-numpy
+    from numpy import float32, floating, int16, int32, integer, number
     from numpy.typing import NDArray
 
     firstdim_nonempty = lambda x: x.shape[0] > 0
     seconddim_nonempty = lambda x: x.shape[1] > 0
 
+    NpFloat = floating[Any]  # otherwise pyright complains about missing type arguments!
+    NpInt = integer[Any]
+    NpNumber = number[Any]
+
     # 1 Dimensional
-    NpNumberDim1 = Annotated[NDArray[number], is_1_dimensional]
+    NpNumberDim1 = Annotated[NDArray[NpNumber], is_1_dimensional]
     NeNpNumberDim1 = Annotated[NpNumberDim1, Is[firstdim_nonempty]]
 
-    NpFloatDim1 = Annotated[NDArray[floating], is_1_dimensional]
+    NpFloatDim1 = Annotated[NDArray[NpFloat], is_1_dimensional]
     NpFloat32Dim1 = Annotated[NDArray[float32], is_1_dimensional]
     NpInt16Dim1 = Annotated[NDArray[int16], is_1_dimensional]
 
-    NpIntDim1 = Annotated[NDArray[int], IsAttr[NDIM, IsEqual[1]]]
+    NpIntDim1 = Annotated[NDArray[NpInt], IsAttr[NDIM, IsEqual[1]]]
     NeNpIntDim1 = Annotated[NpIntDim1, Is[firstdim_nonempty]]
     NeNpInt16Dim1 = Annotated[NpInt16Dim1, Is[firstdim_nonempty]]
 
@@ -86,11 +100,11 @@ try:  # noqa: WPS229
 
     # 2 Dimensional
     # NumpyArray = NDArray[number]
-    NumpyFloat2DArray = Annotated[NDArray[floating], IsAttr[NDIM, IsEqual[2]]]
+    NumpyFloat2DArray = Annotated[NDArray[NpFloat], IsAttr[NDIM, IsEqual[2]]]
     # brackets around multi-line conjunction, see:  https://github.com/beartype/beartype#validator-syntax
 
     NeNumpyFloat2DArray = Annotated[
-        NDArray[floating],
+        NDArray[NpFloat],
         (IsAttr[NDIM, IsEqual[2]] & Is[firstdim_nonempty] & Is[seconddim_nonempty]),
     ]
     # "Delimiting two or or more validators with commas at the top level ... is an alternate syntax for and-ing those validators with the & operator", see: https://github.com/beartype/beartype#validator-syntax
