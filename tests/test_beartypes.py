@@ -1,8 +1,6 @@
 # flake8: noqa WPS202
 from dataclasses import dataclass
-from typing import Any
 
-import numpy as np
 import pytest
 from beartype import beartype
 from beartype.roar import BeartypeCallHintParamViolation
@@ -71,17 +69,18 @@ def wants_builtin(x: PythonBuiltinData):  # noqa: ANN201, ARG001
     pass
 
 
-def test_wants_1d_numpy_array() -> None:
-    with pytest.raises(BeartypeCallHintParamViolation):  # noqa: PT012
-        array = np.array([1, 2, 3])
-        wants_1d_np_array_len_3(array)
-    with pytest.raises(BeartypeCallHintParamViolation):  # noqa: PT012
-        array = np.array([[1, 2, 3]])
-        wants_1d_np_array_len_3(array)
-    wants_1d_np_array_len_3(np.array([1.0, 2.0, 3.0]))
-
-
-@beartype
-def wants_1d_np_array_len_3(x: np.ndarray[(3,), np.dtype[np.floating]]) -> Any:
-    """This function expects a 1D numpy array of length 3."""
-    return x
+# just for learning about np.ndarray[(3,), np.dtype[np.floating]]
+# def test_wants_1d_numpy_array() -> None:
+#     with pytest.raises(BeartypeCallHintParamViolation):  # noqa: PT012
+#         array = np.array([1, 2, 3])
+#         wants_1d_np_array_len_3(array)
+#     with pytest.raises(BeartypeCallHintParamViolation):  # noqa: PT012
+#         array = np.array([[1, 2, 3]])
+#         wants_1d_np_array_len_3(array)
+#     wants_1d_np_array_len_3(np.array([1.0, 2.0, 3.0]))
+#
+#
+# @beartype
+# def wants_1d_np_array_len_3(x: np.ndarray[(3,), np.dtype[np.floating]]) -> Any:
+#     """This function expects a 1D numpy array of length 3."""
+#     return x
