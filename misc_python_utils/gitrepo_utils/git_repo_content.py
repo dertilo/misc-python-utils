@@ -3,15 +3,16 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
-from misc_python_utils.buildable_dataclasses.buildable_data import (
-    BuildableData,
-    CasedNameSlug,
-)
+from buildable_dataclasses.buildable_data import BuildableData
+
 from misc_python_utils.prefix_suffix import PrefixSuffix
+from misc_python_utils.slugification import CasedNameSlug
 
 logger = logging.getLogger(
     __name__,
 )  # "The name is potentially a period-separated hierarchical", see: https://docs.python.org/3.10/library/logging.html
+
+# TODO: got "circular" dependency back to buildable-dataclasses here!
 
 
 @dataclass

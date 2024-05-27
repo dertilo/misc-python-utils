@@ -4,12 +4,12 @@ from collections.abc import Iterator
 from dataclasses import fields
 from typing import Any
 
+from buildable_dataclasses.hashcached_data.hashcached_data import (
+    _CREATE_CACHE_DIR_IN_BASE_DIR,
+)
 from nested_dataclass_serialization.dataclass_serialization_utils import SPECIAL_KEYS
 
 from misc_python_utils.dataclass_utils import _UNDEFINED
-from misc_python_utils.hashcached_data.hashcached_data import (
-    _CREATE_CACHE_DIR_IN_BASE_DIR,
-)
 from misc_python_utils.mermaid_utils.mermaid_data_models import (
     Dict,
     MermaidNode,

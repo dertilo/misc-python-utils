@@ -84,7 +84,12 @@ class MaybeEnforcedSlots:
             len(getattr(self, "__slots__", {})) > 0
         )  # count existing but empty _slots__ as "unslotted", just to be a little more forgiving
         if not is_slotted or __name in self.__slots__:
-            super().__setattr__(__name, __value)
+            try:
+                super().__setattr__(__name, __value)
+            except AttributeError as e:
+                raise AttributeError(  # noqa: TRY003
+                    f"failed to set {__name=} with {__value=} on {self.__class__.__name__} -> did you try to set a property?",  # noqa: EM102
+                ) from e
         else:
             msg = f"'{self.__class__.__name__}' object with {self.__slots__=} has no attribute '{__name}'"
             raise AttributeError(msg)

@@ -3,7 +3,7 @@ import logging
 import warnings
 from collections.abc import Callable, Sequence
 from pathlib import Path
-from typing import Annotated, Any, Protocol, TypeVar
+from typing import TYPE_CHECKING, Annotated, Any, Protocol, TypeVar
 
 from beartype import BeartypeConf, BeartypeStrategy, beartype
 from beartype.roar import BeartypeCallException, BeartypeClawDecorWarning
@@ -79,15 +79,23 @@ try:  # noqa: WPS229
     firstdim_nonempty = lambda x: x.shape[0] > 0
     seconddim_nonempty = lambda x: x.shape[1] > 0
 
-    NpFloat = floating[Any]  # otherwise pyright complains about missing type arguments!
-    NpInt = integer[Any]
-    NpNumber = number[Any]
+    if TYPE_CHECKING:
+        # otherwise pyright complains about missing type arguments!
+        NpFloat = floating[Any]
+        NpInt = integer[Any]
+        NpNumber = number[Any]
+    else:
+        # beartype does not like Any in type-argument of annotation
+        NpFloat = floating
+        NpInt = integer
+        NpNumber = number
 
     # 1 Dimensional
     NpNumberDim1 = Annotated[NDArray[NpNumber], is_1_dimensional]
     NeNpNumberDim1 = Annotated[NpNumberDim1, Is[firstdim_nonempty]]
 
     NpFloatDim1 = Annotated[NDArray[NpFloat], is_1_dimensional]
+
     NpFloat32Dim1 = Annotated[NDArray[float32], is_1_dimensional]
     NpInt16Dim1 = Annotated[NDArray[int16], is_1_dimensional]
 

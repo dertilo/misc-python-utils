@@ -41,7 +41,7 @@ def build_markdown_table(
 
 
 def build_markdown_table_from_dicts(
-    dicts: NeList[dict],
+    dicts: NeList[dict[str, float]],
     col_title: str | None = None,
     col_names: NeList[str] | None = None,
     format_fun: Callable[[Any], str] = format_table_cell,
