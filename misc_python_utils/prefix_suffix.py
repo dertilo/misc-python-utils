@@ -4,8 +4,6 @@ from typing import ClassVar, TypeVar
 
 from typing_extensions import Self
 
-from misc_python_utils.dataclass_utils import UNDEFINED, Undefined
-
 TPrefixSuffix = TypeVar("TPrefixSuffix", bound="PrefixSuffix")
 BASE_PATHES: dict[str, str | TPrefixSuffix] = {}
 BASE_PATHES[
@@ -15,10 +13,10 @@ BASE_PATHES[
 
 @dataclass
 class PrefixSuffix:
-    prefix_key: str | Undefined = UNDEFINED
-    suffix: str | Undefined = UNDEFINED
+    prefix_key: str
+    suffix: str
 
-    prefix: str = dataclasses.field(init=False, default=UNDEFINED)
+    prefix: str = dataclasses.field(init=False)
     __exclude_from_hash__: ClassVar[list[str]] = ["prefix"]
 
     def __str__(self) -> str:
@@ -32,7 +30,7 @@ class PrefixSuffix:
         return PrefixSuffix(self.prefix_key, file_suffix)
 
     def _set_prefix(self) -> None:
-        self.prefix = BASE_PATHES[self.prefix_key]
+        self.prefix = str(BASE_PATHES[self.prefix_key])
         # assert len(self.prefix) > 0, f"base_path is empty!"
 
     def __hash__(self):
