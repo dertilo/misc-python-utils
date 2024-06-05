@@ -133,7 +133,7 @@ class DataclassDict(dict):
     def __setitem__(self, __key, __value):  # noqa: ANN001
         self.__dict__[__key] = __value
 
-    def to_dict(self) -> dict:
+    def to_dict(self) -> dict[str, Any]:
         return {k: v for k, v in self.items() if k != PSEUDO_SLOTS}
 
 

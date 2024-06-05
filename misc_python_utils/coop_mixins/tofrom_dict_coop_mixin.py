@@ -15,7 +15,7 @@ AT_LEAST_SOME_WERE_COOPERATIVE = "<AT_LEAST_SOME_WERE_COOPERATIVE>"
 class FromDictCoopMixin(FixedDict):
     @final
     @classmethod
-    def from_dict(cls, jsn: dict) -> Self:
+    def from_dict(cls, jsn: dict[str, Any]) -> Self:
         assert AT_LEAST_SOME_WERE_COOPERATIVE not in jsn
         cls._at_least_some_were_cooperative = False
         parsed_jsn = cls._from_dict(jsn)
@@ -28,10 +28,10 @@ class FromDictCoopMixin(FixedDict):
             for f in fields(cls)
             if f.init and f.name in parsed_jsn.keys()
         }
-        return cls(**just_known_kwargs)
+        return cls(**just_known_kwargs)  # noqa: Unexpected argument
 
     @classmethod
-    def _from_dict(cls, jsn: dict) -> dict:
+    def _from_dict(cls, jsn: dict[str, Any]) -> dict[str, Any]:
         """
         you are supposed to override this method in your child class
         """
@@ -41,7 +41,7 @@ class FromDictCoopMixin(FixedDict):
 @dataclass
 class ToDictCoopMixin(FixedDict):
     @final
-    def to_dict(self) -> dict:
+    def to_dict(self) -> dict[str, Any]:
         dct = self._to_dict()
         assert (
             AT_LEAST_SOME_WERE_COOPERATIVE in dct
@@ -49,7 +49,7 @@ class ToDictCoopMixin(FixedDict):
         dct.pop(AT_LEAST_SOME_WERE_COOPERATIVE)
         return dct
 
-    def _to_dict(self) -> dict:
+    def _to_dict(self) -> dict[str, Any]:
         """
         you are supposed to override this method in your child class
         """
@@ -60,7 +60,7 @@ class ToDictCoopMixin(FixedDict):
         }
 
 
-def included_by_default(f: Field) -> bool:
+def included_by_default(f: Field[Any]) -> bool:
     return (
         f.init
         and f.name not in (SPECIAL_KEYS + ["_pseudo_slots"])  # noqa: RUF005
