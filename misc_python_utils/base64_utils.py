@@ -19,7 +19,7 @@ class Base64Decoder(json.JSONDecoder):
         )
 
 
-def decode_base64_object_hook(dct: dict) -> dict:
+def decode_base64_object_hook(dct: dict[str, Any]) -> dict[str, Any]:
     return {k: maybe_decode_base64(v) for k, v in dct.items()}
 
 

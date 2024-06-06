@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field
+from typing import Any
 
 import pytest
 
@@ -20,7 +21,7 @@ class TimeStampedLetters(FromDictCoopMixin, ToDictCoopMixin):
     time_stamped_letters: list[TimeStampedLetter] = field(repr=False)
 
     @classmethod
-    def _from_dict(cls, jsn: dict) -> dict:
+    def _from_dict(cls, jsn: dict[str, Any]) -> dict[str, Any]:
         parsed = {
             "time_stamped_letters": [
                 TimeStampedLetter(l, t)
@@ -29,7 +30,7 @@ class TimeStampedLetters(FromDictCoopMixin, ToDictCoopMixin):
         }
         return super()._from_dict(jsn | parsed)
 
-    def _to_dict(self) -> dict:
+    def _to_dict(self) -> dict[str, Any]:
         dct = {
             "text": [tsl.letter for tsl in self.time_stamped_letters],
             "times": [tsl.time for tsl in self.time_stamped_letters],
@@ -42,25 +43,25 @@ class SomeFloat(FromDictCoopMixin, ToDictCoopMixin):
     value: float = field(repr=False)
 
     @classmethod
-    def _from_dict(cls, jsn: dict) -> dict:
+    def _from_dict(cls, jsn: dict[str, Any]) -> dict[str, Any]:
         d = super()._from_dict(
             jsn,
         )  # just to demonstrate that one could change the order
         return d | {"value": float(jsn["value_str"].replace("p", "."))}
 
-    def _to_dict(self) -> dict:
+    def _to_dict(self) -> dict[str, Any]:
         return super()._to_dict() | {"value_str": f"{self.value:.1f}".replace(".", "p")}
 
 
 @dataclass
 class TimeStampedLettersAndSomeFloat(TimeStampedLetters, SomeFloat):
     @classmethod
-    def _from_dict(cls, jsn: dict) -> dict:
+    def _from_dict(cls, jsn: dict[str, Any]) -> dict[str, Any]:
         dct = super()._from_dict(jsn)
         modified_value = {"value": round(dct["value"] * 2)}
         return dct | modified_value
 
-    def _to_dict(self) -> dict:
+    def _to_dict(self) -> dict[str, Any]:
         dct = super()._to_dict()
         modified_again = {"value_str": f"modified to: {round(self.value)}"}
         return dct | modified_again
@@ -68,7 +69,7 @@ class TimeStampedLettersAndSomeFloat(TimeStampedLetters, SomeFloat):
 
 @dataclass(slots=True)
 class UnCooperativeClass(ToDictCoopMixin):
-    def _to_dict(self) -> dict:
+    def _to_dict(self) -> dict[str, Any]:
         return {"whatever": "foobar"}
 
 

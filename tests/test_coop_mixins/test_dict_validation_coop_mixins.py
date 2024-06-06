@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from typing import Any
 
 import pytest
 
@@ -26,10 +27,10 @@ class A(FromDictCoopMixin, ToDictCoopMixin, DataValidationCoopMixinBase):
         super()._parse_validate_data()
 
     @classmethod
-    def _from_dict(cls, jsn: dict) -> dict:
+    def _from_dict(cls, jsn: dict[str, Any]) -> dict[str, Any]:
         return super()._from_dict(jsn) | {"a": float(jsn["a"].replace("a", "."))}
 
-    def _to_dict(self) -> dict:
+    def _to_dict(self) -> dict[str, Any]:
         return super()._to_dict() | {"a": f"{self.a:.1f}".replace(".", "a")}
 
 
@@ -45,10 +46,10 @@ class B(FromDictCoopMixin, ToDictCoopMixin, DataValidationCoopMixinBase):
         super()._parse_validate_data()
 
     @classmethod
-    def _from_dict(cls, jsn: dict) -> dict:
+    def _from_dict(cls, jsn: dict[str, Any]) -> dict[str, Any]:
         return super()._from_dict(jsn) | {"b": float(jsn["b"].replace("b", "."))}
 
-    def _to_dict(self) -> dict:
+    def _to_dict(self) -> dict[str, Any]:
         return super()._to_dict() | {"b": f"{self.b:.1f}".replace(".", "b")}
 
 
@@ -64,10 +65,10 @@ class C(A, B, DataValidationCoopMixinBase):
         super()._parse_validate_data()
 
     @classmethod
-    def _from_dict(cls, jsn: dict) -> dict:
+    def _from_dict(cls, jsn: dict[str, Any]) -> dict[str, Any]:
         return super()._from_dict(jsn) | {"c": float(jsn["c"].replace("c", "."))}
 
-    def _to_dict(self) -> dict:
+    def _to_dict(self) -> dict[str, Any]:
         return super()._to_dict() | {"c": f"{self.c:.1f}".replace(".", "c")}
 
 
@@ -122,10 +123,10 @@ class CparsingAB(A, B, DataValidationCoopMixinBase):
         super()._parse_validate_data()
 
     @classmethod
-    def _from_dict(cls, jsn: dict) -> dict:
+    def _from_dict(cls, jsn: dict[str, Any]) -> dict[str, Any]:
         return super()._from_dict(jsn) | {"c": float(jsn["c"].replace("c", "."))}
 
-    def _to_dict(self) -> dict:
+    def _to_dict(self) -> dict[str, Any]:
         return super()._to_dict() | {"c": f"{self.c:.1f}".replace(".", "c")}
 
 

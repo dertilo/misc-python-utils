@@ -1,4 +1,5 @@
 import json
+from typing import Any
 
 from misc_python_utils.dict_utils import flatten_nested_dict, nest_flattened_dict
 from misc_python_utils.utils import (
@@ -63,7 +64,7 @@ def test_group_dicts(  # noqa: ANN201
             {"foo": "foobar", "jon": 3},
         ]
 
-    def get_groupby_val(d: dict) -> str:
+    def get_groupby_val(d: dict[str, Any]) -> str:
         return d["foo"]
 
     key2group = sorted_groupby(data, get_groupby_val)

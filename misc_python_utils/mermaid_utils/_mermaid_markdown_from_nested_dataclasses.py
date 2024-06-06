@@ -131,14 +131,14 @@ def _node_dependencies_from_dict(
     return NodeDependencies(node, dependencies)
 
 
-def is_dict_of_dataclasses(d: dict) -> bool:
+def is_dict_of_dataclasses(d: dict[str, Any]) -> bool:
     return "_target_" not in d.keys() and any(
         isinstance(v, dict) and "_target_" in v.keys() for v in d.values()
     )
 
 
-def _hacks_for_buildables(d: dict) -> None:
-    def _maybe_dictify_list(d: dict) -> None:
+def _hacks_for_buildables(d: dict[str, Any]) -> None:
+    def _maybe_dictify_list(d: dict[str, Any]) -> None:
         list_to_be_dictified = isinstance(d["data"], list)
         if list_to_be_dictified:
             d["data"] = {f"{i}": e for i, e in enumerate(d["data"])} | {
