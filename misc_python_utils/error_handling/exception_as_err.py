@@ -3,7 +3,7 @@ import functools
 import inspect
 import logging
 import traceback
-from typing import Iterable, Type
+from typing import Iterable, Type, Any, Generic
 
 from beartype import beartype
 from beartype.door import die_if_unbearable
@@ -103,7 +103,7 @@ SomeError = TypeVar(
 )  # tilo: one cannot really know all possible error-types, see "do" notation in result.py
 
 
-class EarlyReturnError(Exception):
+class EarlyReturnError(Exception): # TODO: cannot make it generic like: Generic[E], python complains: TypeError: catching classes that do not inherit from BaseException is not allowed
     def __init__(self, error_value: E) -> None:
         self.error_value = error_value
         super().__init__(
@@ -123,20 +123,20 @@ def return_early(f: Callable[P, Result[R, E]]) -> Callable[P, Result[R, E]]:
         try:
             return f(*args, **kwargs)
         except EarlyReturnError as exc:
-            return Err(exc.error_value)
+            return Err[E](exc.error_value)
 
     return wrapper
 
 
-def raise_early_return_error(e: str) -> int:
+def raise_early_return_error(e: E) -> EarlyReturnError:  # pyright: ignore [reportInvalidTypeVarUse] TODO: cannot make exceptions generic!
     raise EarlyReturnError(e)
 
 
 return_err = raise_early_return_error
 
 
-def unwrap_or_return(obj: Result[T, E]) -> T:
-    return obj.unwrap_or_else(return_err)
+def unwrap_or_return(result: Result[T, E]) -> T:
+    return result.unwrap_or_else(return_err)  # pyright: ignore [reportReturnType]
 
 
 uR = unwrap_or_return

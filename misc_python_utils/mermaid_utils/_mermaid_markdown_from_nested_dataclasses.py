@@ -81,7 +81,8 @@ def _is_good_dep(couldbedep: Any) -> bool:
 def build_node_with_dependencies(obj: Any) -> NodeDependencies:
     assert obj is not None
     if isinstance(obj, dict):
-        node_deps = _node_dependencies_from_dict(obj)
+        obj_d:dict[str,Any]={k:v for k,v in obj.items() if isinstance(k,str)}
+        node_deps = _node_dependencies_from_dict(obj_d)
     else:
         # uuid cause I don't want builtin object to be concentrated in single node
         node_deps = NodeDependencies(
@@ -92,7 +93,7 @@ def build_node_with_dependencies(obj: Any) -> NodeDependencies:
 
 
 def _node_dependencies_from_dict(
-    obj: dict,
+    obj: dict[str,Any],
 ) -> NodeDependencies | None:
     def is_param(pp: Any) -> bool:
         return isinstance(pp, str | int | float)
@@ -106,7 +107,7 @@ def _node_dependencies_from_dict(
         k for k, v in d.items() if is_param(v) and k not in SPECIAL_KEYS
     ]  # TODO(tilo): coupled too closely via SPECIAL_KEYS to nested-dataclass-serialization!
     dependencies = [
-        k for k, v in d.items() if k not in params and k not in SPECIAL_KEYS
+        k for k, _v in d.items() if k not in params and k not in SPECIAL_KEYS
     ]
     if "_target_" in obj.keys():
         node = MermaidNode(

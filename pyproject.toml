@@ -1,9 +1,10 @@
 [tool.poetry]
 name = "misc-python-utils"
 version = "0.0.0" # see: https://pypi.org/project/poetry-dynamic-versioning/
-description = ""
+description = "collection of code-snippets, helpers, utilities"
 authors = ["Tilo Himmelsbach <dertilo@gmail.com>"]
 repository = "https://github.com/dertilo/misc-python-utils"
+license = "MIT"
 
 readme = "README.md"
 packages = [{ include = "misc_python_utils" }]
@@ -16,6 +17,11 @@ nested-dataclass-serialization = "^0.1.0"
 python-slugify = "^8.0.1"
 result = "^0.16.0"
 gitpython = "^3.1.42"
+basedpyright = "^1.12.5"
+diff-match-patch = { version = "^20230430", optional = true }
+
+[package.extras]
+diff-match-patch = ["diff-match-patch"]
 
 [tool.poetry.group.test.dependencies]
 pytest = "^7.4.2"
