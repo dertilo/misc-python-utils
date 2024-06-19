@@ -16,7 +16,8 @@ def exec_command(command: str) -> tuple[list[bytes], list[bytes]]:
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
     ) as p:
-        assert p.stdout is not None and p.stderr is not None
+        assert p.stdout is not None
+        assert p.stderr is not None
         stdout, stderr = p.stdout.readlines(), p.stderr.readlines()
     return stdout, stderr  # noqa: TMN002 TODO: wtf!!
 
@@ -29,7 +30,8 @@ def exec_command_yield_stdout(command: str) -> Iterator[str]:
         stderr=subprocess.PIPE,
     ) as p:
         while p.poll() is None:
-            assert p.stdout is not None and p.stderr is not None
+            assert p.stdout is not None
+            assert p.stderr is not None
             for l in iter(p.stdout.readline, ""):
                 yield l.decode("utf-8").rstrip()
 
@@ -41,7 +43,7 @@ T = TypeVar("T")
 
 
 def iterable_to_batches(g: Iterable[T], batch_size: int) -> Iterator[list[T]]:
-    batch:list[T] = []
+    batch: list[T] = []
     for element in g:
         batch.append(element)
         if len(batch) == batch_size:
@@ -57,7 +59,7 @@ Tout = TypeVar("Tout")
 
 def process_with_threadpool(
     data: list[Tin],
-    process_fun: Callable[[Tin],Tout],
+    process_fun: Callable[[Tin], Tout],
     max_workers: int = 1,
     timeout: float | None = None,
 ) -> Iterator[Tout]:

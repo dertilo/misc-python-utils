@@ -52,7 +52,8 @@ def _process_with_backpressure(
     input_is_exhausted = False
     while not input_is_exhausted:
         completed, remaining_futures = wait(
-            remaining_futures, return_when=FIRST_COMPLETED
+            remaining_futures,
+            return_when=FIRST_COMPLETED,
         )
 
         input_is_exhausted = fill_compleded_by_new_jobs(

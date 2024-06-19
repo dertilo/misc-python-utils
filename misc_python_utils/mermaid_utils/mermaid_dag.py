@@ -21,7 +21,7 @@ def mermaid_html_dag(
     text = mermaid_flowchart(dag, is_dependencies=False)
     if print_it:
         print(text)  # noqa: T201
-    name = f"<h1>{str(dag.name)}</h1>" if hasattr(dag, "name") else ""  # pyright: ignore [reportAttributeAccessIssue, reportUnknownMemberType, reportUnknownArgumentType] -> false-positive?
+    name = f"<h1>{dag.name!s}</h1>" if hasattr(dag, "name") else ""  # pyright: ignore [reportAttributeAccessIssue, reportUnknownMemberType, reportUnknownArgumentType] -> false-positive?
     return f"""{name}
 <div class="mermaid">
 {text}

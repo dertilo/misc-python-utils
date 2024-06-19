@@ -48,7 +48,7 @@ def generate_mermaid_triples(
     for k, v in good_deps:
         node_deps_to = build_node_with_dependencies(v)
         triple = MermaidTriple(node_deps_from.node, k, node_deps_to.node)
-        triple_id = "-".join([f"{getattr(triple,f.name)}" for f in fields(triple)])
+        triple_id = "-".join([f"{getattr(triple, f.name)}" for f in fields(triple)])
         if triple_id not in set_of_triple_ids and node_deps_to.node is not None:
             yield triple
             set_of_triple_ids.append(triple_id)
@@ -66,7 +66,9 @@ def list_to_dict_hack(l: Any) -> dict | Any:
 def _is_good_dep(couldbedep: Any) -> bool:
     if not isinstance(couldbedep, dict):
         if couldbedep is not None:
-            logger.warning(f"{couldbedep} is no dict -> gets ignored")
+            logger.warning(
+                f"{couldbedep.__class__.__name__} is no dict -> gets ignored",
+            )
         return False
     if "_target_" not in couldbedep and not is_dict_of_dataclasses(couldbedep):
         return False
@@ -81,7 +83,7 @@ def _is_good_dep(couldbedep: Any) -> bool:
 def build_node_with_dependencies(obj: Any) -> NodeDependencies:
     assert obj is not None
     if isinstance(obj, dict):
-        obj_d:dict[str,Any]={k:v for k,v in obj.items() if isinstance(k,str)}
+        obj_d: dict[str, Any] = {k: v for k, v in obj.items() if isinstance(k, str)}
         node_deps = _node_dependencies_from_dict(obj_d)
     else:
         # uuid cause I don't want builtin object to be concentrated in single node
@@ -93,7 +95,7 @@ def build_node_with_dependencies(obj: Any) -> NodeDependencies:
 
 
 def _node_dependencies_from_dict(
-    obj: dict[str,Any],
+    obj: dict[str, Any],
 ) -> NodeDependencies | None:
     def is_param(pp: Any) -> bool:
         return isinstance(pp, str | int | float)

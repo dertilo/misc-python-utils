@@ -162,12 +162,12 @@ try:  # noqa: WPS229
     # PEP-compliant type hint matching only a floating-point PyTorch tensor.
     TorchTensorFloat = Annotated[
         torch.Tensor,
-        Is[lambda tens: torch.is_floating_point(tens)],
+        Is[torch.is_floating_point],
     ]
 
     TorchTensorFloat2D = Annotated[
         torch.Tensor,
-        IsAttr[NDIM, IsEqual[2]] & Is[lambda tens: torch.is_floating_point(tens)],
+        IsAttr[NDIM, IsEqual[2]] & Is[torch.is_floating_point],
     ]
 
     # see: https://stackoverflow.com/questions/72253473/how-to-judge-a-torch-tensor-dtype-is-int-or-not -> TODO: sure?

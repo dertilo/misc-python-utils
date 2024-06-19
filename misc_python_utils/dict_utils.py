@@ -35,7 +35,9 @@ def get_val_from_nested_dict(
     d: Mapping[str, MappingOrAny],
     path: list[str],
 ) -> Any | _NOT_EXISTING:
-    value: MappingOrAny | _NOT_EXISTING = NOT_EXISTING  # declaring MappingOrAny here kind of hints towards a recursive type
+    value: MappingOrAny | _NOT_EXISTING = (
+        NOT_EXISTING  # declaring MappingOrAny here kind of hints towards a recursive type
+    )
     for key in path:
         if key in d.keys():
             value = d[key]

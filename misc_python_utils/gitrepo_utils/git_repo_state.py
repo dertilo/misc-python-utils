@@ -89,7 +89,8 @@ def permanent_link_from_class(
     git_repo_state = GitRepoState(repo=repo.ok(), must_be_clean=False)
 
     if file_has_uncommitted_changes(
-        class_file, repo=git_repo_state.repo  # noqa: COM812, SLF001
+        class_file,
+        repo=git_repo_state.repo,  # noqa: COM812, SLF001
     ):  # noqa: SLF001
         # TODO: check if file is added to git staging!
         return Err(UncommittedChanges(class_file))
@@ -97,7 +98,9 @@ def permanent_link_from_class(
     sha = git_repo_state.commit_sha
     git_remote_url = git_repo_state.origin_https_url
     class_file_suffix = class_file.replace(git_repo_state.git_root_path, "")
-    class_line = inspect.findsource(clazz)[
+    class_line = inspect.findsource(
+        clazz,
+    )[
         1
     ]  # see: https://stackoverflow.com/questions/41971660/python-how-to-programmatically-get-line-number-of-class-definition
     if dataclasses.is_dataclass(clazz):

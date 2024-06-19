@@ -18,7 +18,7 @@ logger = logging.getLogger(
     __name__,
 )  # "The name is potentially a period-separated hierarchical", see: https://docs.python.org/3.10/library/logging.html
 
-UNCOMMITTED_CHANGES:set[str] = set()
+UNCOMMITTED_CHANGES: set[str] = set()
 
 
 @dataclass

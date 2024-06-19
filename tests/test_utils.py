@@ -1,4 +1,5 @@
 import json
+import operator
 from typing import Any
 
 from misc_python_utils.dict_utils import flatten_nested_dict, nest_flattened_dict
@@ -49,7 +50,7 @@ def test_collapse_sequence() -> None:
     collapsed = collapse_sequence(
         input_,
         merge_fun=lambda gr: sum(x for _, x in gr),
-        get_key_fun=lambda x: x[0],
+        get_key_fun=operator.itemgetter(0),
     )
     assert json.dumps([(o.key, o.value) for o in collapsed]) == json.dumps(expected)
 

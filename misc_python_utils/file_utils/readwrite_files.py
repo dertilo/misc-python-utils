@@ -25,7 +25,7 @@ def write_jsonl(
 
     def process_line(d: JsonlLine) -> bytes:
         line = json.dumps(d, skipkeys=True, ensure_ascii=False)
-        line = line + "\n"
+        line += "\n"
         return line.encode("utf-8")
 
     with writable(file, mode) as f:
@@ -82,7 +82,7 @@ def write_lines(
     file = str(file)
 
     def process_line(line: str) -> bytes:
-        line = line + "\n"
+        line += "\n"
         return line.encode("utf-8")
 
     with writable(file, mode) as f:

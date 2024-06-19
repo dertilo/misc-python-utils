@@ -7,9 +7,7 @@ from typing_extensions import Self
 
 TPrefixSuffix = TypeVar("TPrefixSuffix", bound="PrefixSuffix")
 BASE_PATHES: dict[str, str | TPrefixSuffix] = {}
-BASE_PATHES[
-    "pwd"
-] = "."  # noqa: S105 -> this is a false-positive! pwd does not stand for "password" but the "current path"
+BASE_PATHES["pwd"] = "."  # noqa: S105 -> this is a false-positive! pwd does not stand for "password" but the "current path"
 
 logger = logging.getLogger(__name__)
 
