@@ -103,7 +103,9 @@ SomeError = TypeVar(
 )  # tilo: one cannot really know all possible error-types, see "do" notation in result.py
 
 
-class EarlyReturnError(Exception): # TODO: cannot make it generic like: Generic[E], python complains: TypeError: catching classes that do not inherit from BaseException is not allowed
+class EarlyReturnError(
+    Exception
+):  # TODO: cannot make it generic like: Generic[E], python complains: TypeError: catching classes that do not inherit from BaseException is not allowed
     def __init__(self, error_value: E) -> None:
         self.error_value = error_value
         super().__init__(

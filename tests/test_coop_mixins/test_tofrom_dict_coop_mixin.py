@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field
+from itertools import starmap
 from typing import Any
 
 import pytest
@@ -23,10 +24,12 @@ class TimeStampedLetters(FromDictCoopMixin, ToDictCoopMixin):
     @classmethod
     def _from_dict(cls, jsn: dict[str, Any]) -> dict[str, Any]:
         parsed = {
-            "time_stamped_letters": [
-                TimeStampedLetter(l, t)
-                for l, t in zip(jsn["text"], jsn["times"], strict=False)
-            ],
+            "time_stamped_letters": list(
+                starmap(
+                    TimeStampedLetter,
+                    zip(jsn["text"], jsn["times"], strict=False),
+                ),
+            ),
         }
         return super()._from_dict(jsn | parsed)
 

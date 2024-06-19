@@ -160,14 +160,19 @@ try:  # noqa: WPS229
 
     # https://github.com/beartype/beartype/issues/98
     # PEP-compliant type hint matching only a floating-point PyTorch tensor.
+    def torch_is_floating(
+        tens,
+    ):  # ruff fix removed the lambda, but the name is necessary for beartype
+        return torch.is_floating_point(tens)
+
     TorchTensorFloat = Annotated[
         torch.Tensor,
-        Is[torch.is_floating_point],
+        Is[torch_is_floating],
     ]
 
     TorchTensorFloat2D = Annotated[
         torch.Tensor,
-        IsAttr[NDIM, IsEqual[2]] & Is[torch.is_floating_point],
+        IsAttr[NDIM, IsEqual[2]] & Is[torch_is_floating],
     ]
 
     # see: https://stackoverflow.com/questions/72253473/how-to-judge-a-torch-tensor-dtype-is-int-or-not -> TODO: sure?

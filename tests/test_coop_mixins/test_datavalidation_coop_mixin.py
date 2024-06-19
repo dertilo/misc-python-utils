@@ -121,32 +121,32 @@ def test_datavalidation_coop_mixin():  # noqa: ANN201
 
 # ----------- following classes are just for testing and show-casing -----------------
 @dataclass
-class NeStartEndAsResult(DataValidationCoopMixinBaseWithResult):
-    start: float
-    end: float
+class NeStartEndAsResult(NeStartEnd, DataValidationCoopMixinBaseWithResult[NeStartEnd]):
     whatever: InitVar[str]
 
     def __post_init__(self, whatever: str):
+        print(f"{whatever=}")
         super().__post_init__()
-
-    def _parse_validate_data(self) -> None:
-        if self.end <= self.start:
-            raise CoopDataValidationError(  # noqa: TRY003
-                f"{self.end=} <= {self.start=}"  # noqa: COM812, EM102
-            )  # noqa: EM102, TRY003
-        super()._parse_validate_data()
 
 
 # -------------------------------------------------------------------------------------
 
 
 def test_datavalidation_coop_mixin_with_result() -> None:
-    o = NeStartEndAsResult(1.0, 2.0, "whatever")
+    o = NeStartEndAsResult(start=1.0, end=2.0, whatever="whatever")
     r = o.parse_validate_as_result()
     assert r.is_ok()
 
-    o = NeStartEndAsResult(1.0, 0.0, "whatever")
-    r = o.parse_validate_as_result()
+    with pytest.raises(
+        CoopDataValidationError,
+        match=f"{NeStartEnd.__name__} complains",
+    ):
+        NeStartEnd(1.0, 0.0)
+
+    o = NeStartEndAsResult(
+        start=1.0, end=0.0, whatever="whatever"
+    )  # does not raise an error
+    r = o.parse_validate_as_result()  # but forces you to handle a result
     assert r.is_err()
 
 
