@@ -1,8 +1,7 @@
-from dataclasses import dataclass, field
-from typing import final
+from dataclasses import dataclass, field, fields
+from typing import Generic, TypeVar, final
 
 from result import Err, Ok, Result
-from typing_extensions import Self
 
 from misc_python_utils.dataclass_utils import FixedDict
 
@@ -45,24 +44,37 @@ class DataValidationCoopMixinBase(FixedDict):
         self._validate_call_chain_worked = True
 
 
+T = TypeVar("T")
+
+
 @dataclass
-class DataValidationCoopMixinBaseWithResult(FixedDict):
-    _validate_call_chain_worked: bool = field(init=False, repr=False, default=False)
+class DataValidationCoopMixinBaseWithResult(DataValidationCoopMixinBase, Generic[T]):
+    """
+    not recommended to use this class, no way to make sure that "parse_validate_as_result" was called!
+    well actually thats the same with Buildables!
+    """
+
+    def __post_init__(self):  # pycharm complains, cause we don't obey the "final" here
+        """
+        just to "free" the __post_init__
+        you are allowed to override!
+        """
 
     @final
-    def parse_validate_as_result(self) -> Result[Self, str]:
-        self._validate_call_chain_worked = False
+    def parse_validate_as_result(self) -> Result[T, CoopDataValidationError]:
         try:
-            self._parse_validate_data()
+            clazz: type[T] = self.__class__.__mro__[1]
+            res = Ok(
+                clazz(
+                    **{f.name: getattr(self, f.name) for f in fields(clazz) if f.init},
+                ),
+            )
         except CoopDataValidationError as e:
-            return Err(str(e))
+            res = Err(e)
+        return res
 
-        assert self._validate_call_chain_worked
-        return Ok(self)
-
-    def _parse_validate_data(self) -> None:
+    def parse(self) -> Result[T, CoopDataValidationError]:
         """
-        inheriting classes are supposed to override this method!
-        :return:
+        shorter method-name just for convinience
         """
-        self._validate_call_chain_worked = True
+        return self.parse_validate_as_result()
