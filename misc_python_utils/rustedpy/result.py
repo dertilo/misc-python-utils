@@ -1,3 +1,6 @@
+# based on: https://github.com/rustedpy/result/blob/main/src/result/result.py
+# fmt: off
+
 from __future__ import annotations
 
 import functools
@@ -132,13 +135,13 @@ class Ok(Generic[T]):
         """
         return self._value
 
-    def unwrap_or_else(self, op: object) -> T:
+    def unwrap_or_else(self, op: Callable[[E], T]) -> T:
         """
         Return the value.
         """
         return self._value
 
-    def unwrap_or_raise(self, e: object) -> T:
+    def unwrap_or_raise(self, e: Type[TBE]) -> T:
         """
         Return the value.
         """
@@ -160,21 +163,21 @@ class Ok(Generic[T]):
         """
         return Ok(await op(self._value))
 
-    def map_or(self, default: object, op: Callable[[T], U]) -> U:
+    def map_or(self, default: U, op: Callable[[T], U]) -> U:
         """
         The contained result is `Ok`, so return the original value mapped to a new
         value using the passed in function.
         """
         return op(self._value)
 
-    def map_or_else(self, default_op: object, op: Callable[[T], U]) -> U:
+    def map_or_else(self, default_op: Callable[[], U], op: Callable[[T], U]) -> U:
         """
         The contained result is `Ok`, so return original value mapped to
         a new value using the passed in `op` function.
         """
         return op(self._value)
 
-    def map_err(self, op: object) -> Ok[T]:
+    def map_err(self, op: Callable[[E], F]) -> Ok[T]:
         """
         The contained result is `Ok`, so return `Ok` with the original value
         """
@@ -196,7 +199,7 @@ class Ok(Generic[T]):
         """
         return await op(self._value)
 
-    def or_else(self, op: object) -> Ok[T]:
+    def or_else(self, op: Callable[[E], Result[T, F]]) -> Ok[T]:
         """
         The contained result is `Ok`, so return `Ok` with the original value
         """
@@ -343,26 +346,26 @@ class Err(Generic[E]):
         """
         raise e(self._value)
 
-    def map(self, op: object) -> Err[E]:
+    def map(self, op: Callable[[T], U]) -> Err[E]:
         """
         Return `Err` with the same value
         """
         return self
 
-    async def map_async(self, op: object) -> Err[E]:
+    async def map_async(self, op: Callable[[T], U]) -> Err[E]:
         """
         The contained result is `Ok`, so return the result of `op` with the
         original value passed in
         """
         return self
 
-    def map_or(self, default: U, op: object) -> U:
+    def map_or(self, default: U, op: Callable[[T], U]) -> U:
         """
         Return the default value
         """
         return default
 
-    def map_or_else(self, default_op: Callable[[], U], op: object) -> U:
+    def map_or_else(self, default_op: Callable[[], U], op: Callable[[T], U]) -> U:
         """
         Return the result of the default operation
         """
@@ -375,13 +378,13 @@ class Err(Generic[E]):
         """
         return Err(op(self._value))
 
-    def and_then(self, op: object) -> Err[E]:
+    def and_then(self, op: Callable[[T], Result[U, E]]) -> Err[E]:
         """
         The contained result is `Err`, so return `Err` with the original value
         """
         return self
 
-    async def and_then_async(self, op: object) -> Err[E]:
+    async def and_then_async(self, op: Callable[[T], Awaitable[Result[U, E]]]) -> Err[E]:
         """
         The contained result is `Err`, so return `Err` with the original value
         """

@@ -1,3 +1,5 @@
+# based on: https://github.com/rustedpy/maybe/blob/master/src/maybe/maybe.py
+# fmt: off
 from __future__ import annotations
 
 import sys
@@ -87,13 +89,13 @@ class Some(Generic[T]):
         """
         return self._value
 
-    def unwrap_or_else(self, op: object) -> T:
+    def unwrap_or_else(self, op: Callable[[], T]) -> T:
         """
         Return the value.
         """
         return self._value
 
-    def unwrap_or_raise(self, e: object) -> T:
+    def unwrap_or_raise(self, e: Type[TBE]) -> T:
         """
         Return the value.
         """
@@ -106,14 +108,14 @@ class Some(Generic[T]):
         """
         return Some(op(self._value))
 
-    def map_or(self, _default: object, op: Callable[[T], U]) -> U:
+    def map_or(self, _default: U, op: Callable[[T], U]) -> U:
         """
         There is a contained value, so return the original value mapped to a
         new value using the passed in function.
         """
         return op(self._value)
 
-    def map_or_else(self, _default_op: object, op: Callable[[T], U]) -> U:
+    def map_or_else(self, _default_op: Callable[[], U], op: Callable[[T], U]) -> U:
         """
         There is a contained value, so return original value mapped to a new
         value using the passed in `op` function.
@@ -127,14 +129,14 @@ class Some(Generic[T]):
         """
         return op(self._value)
 
-    def or_else(self, _op: object) -> Some[T]:
+    def or_else(self, _op: Callable[[], Maybe[T]]) -> Some[T]:
         """
         There is a contained value, so return `Some` with the original value
         """
         return self
 
 
-class Nothing:
+class Nothing(Generic[T]):
     """
     An object that indicates no inner value is present
     """
@@ -209,25 +211,25 @@ class Nothing:
         """
         raise e()
 
-    def map(self, _op: object) -> Nothing:
+    def map(self, _op: Callable[[T], U]) -> Nothing[U]:
         """
         Return `Nothing`
         """
         return self
 
-    def map_or(self, default: U, _op: object) -> U:
+    def map_or(self, default: U, _op: Callable[[T], U]) -> U:
         """
         Return the default value
         """
         return default
 
-    def map_or_else(self, default_op: Callable[[], U], op: object) -> U:
+    def map_or_else(self, default_op: Callable[[], U], op: Callable[[T], U]) -> U:
         """
         Return the result of the `default_op` function
         """
         return default_op()
 
-    def and_then(self, _op: object) -> Nothing:
+    def and_then(self, _op: Callable[[T], Maybe[U]]) -> Nothing[U]:
         """
         There is no contained value, so return `Nothing`
         """
@@ -247,7 +249,7 @@ A simple `Maybe` type inspired by Rust.
 Not all methods (https://doc.rust-lang.org/std/option/enum.Option.html)
 have been implemented, only the ones that make sense in the Python context.
 """
-Maybe: TypeAlias = Union[Some[T], Nothing]
+Maybe: TypeAlias = Union[Some[T], Nothing[T]]
 
 """
 A type to use in `isinstance` checks.
