@@ -89,7 +89,7 @@ class Some(Generic[T]):
         """
         return self._value
 
-    def unwrap_or_else(self, op: Callable[[], T]) -> T:
+    def unwrap_or_else(self, op: Callable[[], U]) -> T:
         """
         Return the value.
         """
@@ -108,14 +108,14 @@ class Some(Generic[T]):
         """
         return Some(op(self._value))
 
-    def map_or(self, _default: U, op: Callable[[T], U]) -> U:
+    def map_or(self, _default: F, op: Callable[[T], U]) -> U:
         """
         There is a contained value, so return the original value mapped to a
         new value using the passed in function.
         """
         return op(self._value)
 
-    def map_or_else(self, _default_op: Callable[[], U], op: Callable[[T], U]) -> U:
+    def map_or_else(self, _default_op: Callable[[], F], op: Callable[[T], U]) -> U:
         """
         There is a contained value, so return original value mapped to a new
         value using the passed in `op` function.
@@ -129,7 +129,7 @@ class Some(Generic[T]):
         """
         return op(self._value)
 
-    def or_else(self, _op: Callable[[], Maybe[T]]) -> Some[T]:
+    def or_else(self, _op: Callable[[], Maybe[U]]) -> Some[T]:
         """
         There is a contained value, so return `Some` with the original value
         """
@@ -199,7 +199,7 @@ class Nothing(Generic[T]):
         """
         return default
 
-    def unwrap_or_else(self, op: Callable[[], T]) -> T:
+    def unwrap_or_else(self, op: Callable[[], U]) -> U:
         """
         There is no contained value, so return a new value by calling `op`.
         """
@@ -215,15 +215,15 @@ class Nothing(Generic[T]):
         """
         Return `Nothing`
         """
-        return self
+        return Nothing[U]()
 
-    def map_or(self, default: U, _op: Callable[[T], U]) -> U:
+    def map_or(self, default: F, _op: Callable[[T], U]) -> F:
         """
         Return the default value
         """
         return default
 
-    def map_or_else(self, default_op: Callable[[], U], op: Callable[[T], U]) -> U:
+    def map_or_else(self, default_op: Callable[[], F], op: Callable[[T], U]) -> F:
         """
         Return the result of the `default_op` function
         """
@@ -233,9 +233,9 @@ class Nothing(Generic[T]):
         """
         There is no contained value, so return `Nothing`
         """
-        return self
+        return Nothing[U]()
 
-    def or_else(self, op: Callable[[], Maybe[T]]) -> Maybe[T]:
+    def or_else(self, op: Callable[[], Maybe[U]]) -> Maybe[U]:
         """
         There is no contained value, so return the result of `op`
         """
