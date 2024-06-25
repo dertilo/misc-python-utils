@@ -38,7 +38,7 @@ R = TypeVar("R")
 TBE = TypeVar("TBE", bound=BaseException)
 
 
-class Ok(Generic[T]):
+class Ok(Generic[T,E]):
     """
     A value that indicates success and which stores arbitrary data for the return value.
     """
@@ -135,7 +135,7 @@ class Ok(Generic[T]):
         """
         return self._value
 
-    def unwrap_or_else(self, op: Callable[[E], T]) -> T:
+    def unwrap_or_else(self, op: Callable[[E], U]) -> T:
         """
         Return the value.
         """
@@ -147,43 +147,43 @@ class Ok(Generic[T]):
         """
         return self._value
 
-    def map(self, op: Callable[[T], U]) -> Ok[U]:
+    def map(self, op: Callable[[T], U]) -> Ok[U,E]:
         """
         The contained result is `Ok`, so return `Ok` with original value mapped to
         a new value using the passed in function.
         """
-        return Ok(op(self._value))
+        return Ok[U,E](op(self._value))
 
     async def map_async(
         self, op: Callable[[T], Awaitable[U]]
-    ) -> Ok[U]:
+    ) -> Ok[U,E]:
         """
         The contained result is `Ok`, so return the result of `op` with the
         original value passed in
         """
-        return Ok(await op(self._value))
+        return Ok[U,E](await op(self._value))
 
-    def map_or(self, default: U, op: Callable[[T], U]) -> U:
+    def map_or(self, default: F, op: Callable[[T], U]) -> U:
         """
         The contained result is `Ok`, so return the original value mapped to a new
         value using the passed in function.
         """
         return op(self._value)
 
-    def map_or_else(self, default_op: Callable[[], U], op: Callable[[T], U]) -> U:
+    def map_or_else(self, default_op: Callable[[], F], op: Callable[[T], U]) -> U:
         """
         The contained result is `Ok`, so return original value mapped to
         a new value using the passed in `op` function.
         """
         return op(self._value)
 
-    def map_err(self, op: Callable[[E], F]) -> Ok[T]:
+    def map_err(self, op: Callable[[E], F]) -> Ok[T,E]:
         """
         The contained result is `Ok`, so return `Ok` with the original value
         """
         return self
 
-    def and_then(self, op: Callable[[T], Result[U, E]]) -> Result[U, E]:
+    def and_then(self, op: Callable[[T], Result[U, F]]) -> Result[U, F]:
         """
         The contained result is `Ok`, so return the result of `op` with the
         original value passed in
@@ -191,15 +191,15 @@ class Ok(Generic[T]):
         return op(self._value)
 
     async def and_then_async(
-        self, op: Callable[[T], Awaitable[Result[U, E]]]
-    ) -> Result[U, E]:
+        self, op: Callable[[T], Awaitable[Result[U, F]]]
+    ) -> Result[U, F]:
         """
         The contained result is `Ok`, so return the result of `op` with the
         original value passed in
         """
         return await op(self._value)
 
-    def or_else(self, op: Callable[[E], Result[T, F]]) -> Ok[T]:
+    def or_else(self, op: Callable[[E], Result[U, F]]) -> Ok[T,E]:
         """
         The contained result is `Ok`, so return `Ok` with the original value
         """
@@ -219,7 +219,7 @@ class DoException(Exception):
         self.err = err
 
 
-class Err(Generic[E]):
+class Err(Generic[E,T]):
     """
     A value that signifies failure and which stores arbitrary data for the error.
     """
@@ -333,7 +333,7 @@ class Err(Generic[E]):
         """
         return default
 
-    def unwrap_or_else(self, op: Callable[[E], T]) -> T:
+    def unwrap_or_else(self, op: Callable[[E], U]) -> U:
         """
         The contained result is ``Err``, so return the result of applying
         ``op`` to the error value.
@@ -346,51 +346,51 @@ class Err(Generic[E]):
         """
         raise e(self._value)
 
-    def map(self, op: Callable[[T], U]) -> Err[E]:
+    def map(self, op: Callable[[T], U]) -> Err[E,T]:
         """
         Return `Err` with the same value
         """
         return self
 
-    async def map_async(self, op: Callable[[T], U]) -> Err[E]:
+    async def map_async(self, op: Callable[[T], Awaitable[U]]) -> Err[E,T]:
         """
         The contained result is `Ok`, so return the result of `op` with the
         original value passed in
         """
         return self
 
-    def map_or(self, default: U, op: Callable[[T], U]) -> U:
+    def map_or(self, default: F, op: Callable[[T], U]) -> F:
         """
         Return the default value
         """
         return default
 
-    def map_or_else(self, default_op: Callable[[], U], op: Callable[[T], U]) -> U:
+    def map_or_else(self, default_op: Callable[[], F], op: Callable[[T], U]) -> F:
         """
         Return the result of the default operation
         """
         return default_op()
 
-    def map_err(self, op: Callable[[E], F]) -> Err[F]:
+    def map_err(self, op: Callable[[E], F]) -> Err[F,T]:
         """
         The contained result is `Err`, so return `Err` with original error mapped to
         a new value using the passed in function.
         """
-        return Err(op(self._value))
+        return Err[F,T](op(self._value))
 
-    def and_then(self, op: Callable[[T], Result[U, E]]) -> Err[E]:
+    def and_then(self, op: Callable[[T], Result[U, F]]) -> Err[E,T]: 
         """
         The contained result is `Err`, so return `Err` with the original value
         """
         return self
 
-    async def and_then_async(self, op: Callable[[T], Awaitable[Result[U, E]]]) -> Err[E]:
+    async def and_then_async(self, op: Callable[[T], Awaitable[Result[U, F]]]) -> Err[E,T]:
         """
         The contained result is `Err`, so return `Err` with the original value
         """
         return self
 
-    def or_else(self, op: Callable[[E], Result[T, F]]) -> Result[T, F]:
+    def or_else(self, op: Callable[[E], Result[U, F]]) -> Result[U, F]:
         """
         The contained result is `Err`, so return the result of `op` with the
         original value passed in
@@ -405,7 +405,7 @@ A simple `Result` type inspired by Rust.
 Not all methods (https://doc.rust-lang.org/std/result/enum.Result.html)
 have been implemented, only the ones that make sense in the Python context.
 """
-Result: TypeAlias = Union[Ok[T], Err[E]]
+Result: TypeAlias = Union[Ok[T,E], Err[E,T]]
 
 """
 A type to use in `isinstance` checks.
