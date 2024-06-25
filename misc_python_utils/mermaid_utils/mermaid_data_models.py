@@ -41,7 +41,7 @@ class MermaidNode:
             else self.full_module_name.split(".")[-1]
         )
 
-    def __repr__(self) -> str:
+    def __repr__(self) -> str:  # noqa: C901, PLR0912, PLR0915
         text = self.class_name
         params = self.params
         if params is not None and self.display_params:
@@ -85,7 +85,7 @@ class MermaidNode:
             )
         return clazz  # noqa: RET504
 
-    def _add_params(self, params: dict, text: str) -> str:
+    def _add_params(self, params: dict, text: str) -> str:  # noqa: PLR6301
         params_kv = (
             json.dumps(params, indent=4)
             .replace("{", "")

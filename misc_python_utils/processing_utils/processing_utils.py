@@ -1,5 +1,5 @@
 import logging
-import subprocess
+import subprocess  # noqa: S404
 from collections.abc import Callable, Iterable, Iterator
 from concurrent import futures as cf
 from typing import TypeVar

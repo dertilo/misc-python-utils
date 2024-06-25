@@ -69,7 +69,7 @@ def extract_file(
     assert len(stderr) == 0, f"{cmd=}: {stderr=}"
 
 
-def wget_file(  # noqa: PLR0913
+def wget_file(  # noqa: PLR0913, PLR0917
     url: str,
     data_folder: str,
     verbose: bool = False,

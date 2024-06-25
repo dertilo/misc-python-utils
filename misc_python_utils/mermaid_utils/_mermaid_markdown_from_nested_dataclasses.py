@@ -5,7 +5,7 @@ from dataclasses import fields
 from typing import Any
 
 from buildable_dataclasses.hashcached_data.hashcached_data import (
-    _CREATE_CACHE_DIR_IN_BASE_DIR,
+    _CREATE_CACHE_DIR_IN_BASE_DIR,  # noqa: PLC2701
 )
 from nested_dataclass_serialization.dataclass_serialization_utils import SPECIAL_KEYS
 

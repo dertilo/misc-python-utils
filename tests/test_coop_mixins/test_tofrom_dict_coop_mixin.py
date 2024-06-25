@@ -72,7 +72,7 @@ class TimeStampedLettersAndSomeFloat(TimeStampedLetters, SomeFloat):
 
 @dataclass(slots=True)
 class UnCooperativeClass(ToDictCoopMixin):
-    def _to_dict(self) -> dict[str, Any]:
+    def _to_dict(self) -> dict[str, Any]:  # noqa: PLR6301
         return {"whatever": "foobar"}
 
 

@@ -58,7 +58,7 @@ def write_csv(
     )
 
 
-def read_csv(  # noqa: PLR0913
+def read_csv(  # noqa: PLR0913, PLR0917
     file_path: str,
     delimiter: str = "\t",
     encoding: str = "utf-8",

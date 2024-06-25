@@ -47,7 +47,7 @@ def prepare_logger(
     root_logger = logging.getLogger()
     root_logger.handlers.clear()
     root_logger.addHandler(ch)
-    for logger_names, log_level in namespaces2loglevel.items():
+    for logger_names, log_level in namespaces2loglevel.items():  # noqa: PLR1704
         if isinstance(logger_names, str):
             logger_names = (logger_names,)  # noqa: PLW2901
         for ns in logger_names:

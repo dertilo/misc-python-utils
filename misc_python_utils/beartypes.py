@@ -160,8 +160,8 @@ try:  # noqa: WPS229
 
     # https://github.com/beartype/beartype/issues/98
     # PEP-compliant type hint matching only a floating-point PyTorch tensor.
-    def torch_is_floating(
-        tens,
+    def torch_is_floating(  # noqa: ANN201
+        tens,  # noqa: ANN001
     ):  # ruff fix removed the lambda, but the name is necessary for beartype
         return torch.is_floating_point(tens)
 

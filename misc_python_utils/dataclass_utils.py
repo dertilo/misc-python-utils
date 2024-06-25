@@ -57,7 +57,7 @@ class EnforcedSlots:
 
     """
 
-    def __setattr__(self, __name: str, __value: Any) -> None:
+    def __setattr__(self, __name: str, __value: Any) -> None:  # noqa: PYI063
         """
         to prevent accidental assignment of attributes that are not in __slots__
         """
@@ -76,7 +76,7 @@ class MaybeEnforcedSlots:
     a slotted class that inherits from an unslotted one, also inherits the __dict__ attribute
     """
 
-    def __setattr__(self, __name: str, __value: Any) -> None:
+    def __setattr__(self, __name: str, __value: Any) -> None:  # noqa: PYI063
         """
         to prevent accidental assignment of attributes that are not in __slots__
         """
@@ -113,7 +113,7 @@ class FixedDict:
     def __post_init__(self):
         self._pseudo_slots = tuple(f.name for f in dataclasses.fields(self))
 
-    def __setattr__(self, __name: str, __value: Any) -> None:
+    def __setattr__(self, __name: str, __value: Any) -> None:  # noqa: PYI063
         """
         to prevent dynamic assignment of unknown/new attributes
         """
@@ -127,10 +127,10 @@ class FixedDict:
 
 @dataclasses.dataclass
 class DataclassDict(dict):
-    def __getitem__(self, __key):  # noqa: ANN001
+    def __getitem__(self, __key):  # noqa: ANN001, PYI063
         return self.__dict__[__key]
 
-    def __setitem__(self, __key, __value):  # noqa: ANN001
+    def __setitem__(self, __key, __value):  # noqa: ANN001, PYI063
         self.__dict__[__key] = __value
 
     def to_dict(self) -> dict[str, Any]:
@@ -139,6 +139,6 @@ class DataclassDict(dict):
 
 @dataclasses.dataclass
 class DataclassFixedDict(FixedDict, DataclassDict):
-    def __setitem__(self, __key, __value):  # noqa: ANN001
+    def __setitem__(self, __key, __value):  # noqa: ANN001, PYI063
         setattr(self, __key, __value)
         self.__dict__[__key] = __value

@@ -9,7 +9,7 @@ Tin = TypeVar("Tin")
 Tout = TypeVar("Tout")
 
 
-class PoisonPill(str):
+class PoisonPill(str):  # noqa: SLOT000
     pass
 
 

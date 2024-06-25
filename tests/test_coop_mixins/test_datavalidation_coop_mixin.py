@@ -125,7 +125,7 @@ class NeStartEndAsResult(NeStartEnd, DataValidationCoopMixinBaseWithResult[NeSta
     whatever: InitVar[str]
 
     def __post_init__(self, whatever: str):
-        print(f"{whatever=}")
+        print(f"{whatever=}")  # noqa: T201
         super().__post_init__()
 
 
@@ -155,7 +155,7 @@ def test_datavalidation_coop_mixin_with_result() -> None:
 # -------------------------------------------------------------------------------------
 
 
-aR = as_result_lambda(CoopDataValidationError)
+aR = as_result_lambda(CoopDataValidationError)  # noqa: N816
 
 
 def test_as_result_lambda() -> None:

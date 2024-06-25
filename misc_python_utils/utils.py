@@ -81,7 +81,7 @@ def collapse_sequence(
     ]
 
 
-def just_try(  # noqa: C901, PLR0913, WPS231
+def just_try(  # noqa: C901, PLR0913, PLR0917, WPS231
     supplier: Callable[[], T],
     default: T_default = None,
     reraise: bool = False,

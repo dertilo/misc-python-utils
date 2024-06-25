@@ -65,7 +65,7 @@ def test_group_dicts(  # noqa: ANN201
             {"foo": "foobar", "jon": 3},
         ]
 
-    def get_groupby_val(d: dict[str, Any]) -> str:
+    def get_groupby_val(d: dict[str, Any]) -> str:  # noqa: FURB118
         return d["foo"]
 
     key2group = sorted_groupby(data, get_groupby_val)

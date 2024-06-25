@@ -32,7 +32,7 @@ class GitRepoContent(BuildableData):
         return not self.do_pull and Path(f"{self.data_dir}/.git").is_dir()
 
     def _build_data(self) -> Any:
-        from git import (
+        from git import (  # noqa: PLC0415
             Repo,  # not top-level cause inside docker-container this complains for not having git installed!
         )
 
