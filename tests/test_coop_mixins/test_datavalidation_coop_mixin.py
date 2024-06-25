@@ -144,7 +144,9 @@ def test_datavalidation_coop_mixin_with_result() -> None:
         NeStartEnd(1.0, 0.0)
 
     o = NeStartEndAsResult(
-        start=1.0, end=0.0, whatever="whatever"
+        start=1.0,
+        end=0.0,
+        whatever="whatever",
     )  # does not raise an error
     r = o.parse_validate_as_result()  # but forces you to handle a result
     assert r.is_err()

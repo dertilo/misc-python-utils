@@ -4,8 +4,6 @@ import logging
 from dataclasses import dataclass
 from typing import Any, ClassVar
 
-from result import Err, Ok
-
 from misc_python_utils.error_handling.as_result_logged import (
     as_result_logged_panic_for_param_violations,
 )
@@ -13,6 +11,7 @@ from misc_python_utils.gitrepo_utils.git_repo_state import (
     UncommittedChanges,
     permanent_link_from_class,
 )
+from misc_python_utils.rustedpy.result import Err, Ok
 
 logger = logging.getLogger(
     __name__,

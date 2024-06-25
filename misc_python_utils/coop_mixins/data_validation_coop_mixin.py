@@ -1,9 +1,8 @@
 from dataclasses import dataclass, field, fields
 from typing import Generic, TypeVar, final
 
-from result import Err, Ok, Result
-
 from misc_python_utils.dataclass_utils import FixedDict
+from misc_python_utils.rustedpy.result import Err, Ok, Result
 
 
 class CoopDataValidationError(ValueError):

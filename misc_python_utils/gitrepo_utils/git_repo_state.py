@@ -6,7 +6,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import TYPE_CHECKING
 
-from result import Err, Ok, Result
+from misc_python_utils.rustedpy.result import Err, Ok, Result
 
 logger = logging.getLogger(
     __name__,

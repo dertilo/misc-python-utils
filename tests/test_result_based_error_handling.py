@@ -3,7 +3,6 @@ from beartype.roar import (
     BeartypeCallHintParamViolation,
     BeartypeCallHintReturnViolation,
 )
-from result import Err, Ok, Result
 
 from misc_python_utils.error_handling.as_result_logged import (
     as_result_logged_panic_for_param_violations,
@@ -15,6 +14,7 @@ from misc_python_utils.error_handling.exception_as_err import (
     return_err,
     unwrap_or_return,
 )
+from misc_python_utils.rustedpy.result import Err, Ok, Result
 
 # -----------------------------------------------------------------------------------
 

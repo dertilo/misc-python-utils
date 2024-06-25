@@ -7,7 +7,7 @@ import traceback
 from beartype import beartype
 from beartype.roar import BeartypeCallHintParamViolation
 from beartype.typing import Callable, ParamSpec, TypeVar
-from result import Err, Ok, OkErr, Result
+from misc_python_utils.rustedpy.result import Err, Ok, OkErr, Result
 
 from misc_python_utils.beartypes import nobeartype
 

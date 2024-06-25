@@ -1,15 +1,10 @@
-# flake8: noqa
 import functools
 import inspect
-import logging
-import traceback
 
-from beartype import beartype
-from beartype.roar import BeartypeCallHintParamViolation
 from beartype.typing import Callable, ParamSpec, TypeVar
-from result import Err, Ok, OkErr, Result
 
 from misc_python_utils.beartypes import nobeartype
+from misc_python_utils.rustedpy.result import Err, Ok, Result
 
 T = TypeVar("T", covariant=True)  # Success type
 E = TypeVar("E", covariant=True)  # Error type
@@ -18,7 +13,8 @@ F = TypeVar("F")
 P = ParamSpec("P")
 R = TypeVar("R")
 TBE = TypeVar(
-    "TBE", bound=Exception
+    "TBE",
+    bound=Exception,
 )  # tilo:  original code had "BaseException" here, but thats too liberal! one should not catch SystemExit, KeyboardInterrupt, etc.!
 
 
@@ -30,11 +26,13 @@ def as_result_lambda(
     if not exceptions or not all(
         inspect.isclass(exception)
         and issubclass(
-            exception, Exception
+            exception,
+            Exception,
         )  # tilo: Exception instead of BaseException!
         for exception in exceptions
     ):
-        raise TypeError("as_result() requires one or more exception types")
+        msg = "as_result() requires one or more exception types"
+        raise TypeError(msg)
 
     def decorator(f: Callable[[], R]) -> Result[R, TBE]:
         """
@@ -49,7 +47,7 @@ def as_result_lambda(
                 return Ok(o)
             except exceptions as exc:
                 if type(exc) in panic_exceptions:
-                    raise exc
+                    raise
                 return Err(exc)
 
         return wrapper()

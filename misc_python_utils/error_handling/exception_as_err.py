@@ -3,15 +3,13 @@ import functools
 import inspect
 import logging
 import traceback
-from typing import Iterable, Type, Any, Generic
 
 from beartype import beartype
-from beartype.door import die_if_unbearable
 from beartype.roar import BeartypeCallHintParamViolation
 from beartype.typing import Callable, ParamSpec, TypeVar
-from result import Err, Ok, OkErr, Result
 
 from misc_python_utils.beartypes import nobeartype
+from misc_python_utils.rustedpy.result import Result, Err
 
 T = TypeVar("T", covariant=True)  # Success type
 E = TypeVar("E")  # Error type
@@ -125,7 +123,7 @@ def return_early(f: Callable[P, Result[R, E]]) -> Callable[P, Result[R, E]]:
         try:
             return f(*args, **kwargs)
         except EarlyReturnError as exc:
-            return Err[E](exc.error_value)
+            return Err[E, R](exc.error_value)
 
     return wrapper
 
