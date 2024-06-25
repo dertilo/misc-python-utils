@@ -123,7 +123,9 @@ def return_early(f: Callable[P, Result[R, E]]) -> Callable[P, Result[R, E]]:
         try:
             return f(*args, **kwargs)
         except EarlyReturnError as exc:
-            return Err[E, R](exc.error_value)
+            return Err[E, R](
+                exc.error_value
+            )  # E should be a type-union that includes all possible error-types
 
     return wrapper
 

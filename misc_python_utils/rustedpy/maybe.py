@@ -1,6 +1,7 @@
+from __future__ import annotations
+
 # based on: https://github.com/rustedpy/maybe/blob/master/src/maybe/maybe.py
 # fmt: off
-from __future__ import annotations
 
 import sys
 from typing import (
