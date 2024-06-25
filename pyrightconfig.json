@@ -1,0 +1,26 @@
+{
+  "typeCheckingMode": "all",
+  "reportAny": false,
+  "reportImplicitOverride": false,
+  // cause typing.override leads to false positives
+  "reportMissingSuperCall": false,
+  "reportMissingParameterType": false, // already done by ruff
+  "reportUnusedCallResult": false, // gibt schlimmeres!
+  "reportPrivateUsage": false, // underscore convention is enough!
+  "reportIncompatibleMethodOverride": false,
+  "reportMissingTypeStubs": false,
+  "reportUnknownLambdaType": false,
+
+  "reportUnknownVariableType": "warning",
+  "reportUnknownMemberType": "warning",
+  "reportUnknownArgumentType": "warning",
+  "reportMissingTypeArgument": "warning",
+  "reportUnknownParameterType": "warning",
+  "reportIgnoreCommentWithoutRule": "warning",
+  "reportUnusedVariable": "warning",
+  "exclude": [
+//    "tests",
+    "misc_python_utils/mermaid_utils/flowchart_from_code.py",
+    "misc_python_utils/mermaid_utils/_mermaid_markdown_from_nested_dataclasses.py"
+  ], // TODO
+}
