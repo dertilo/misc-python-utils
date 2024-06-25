@@ -1,4 +1,4 @@
 extend-exclude=[
-    "misc_python_utils/rustedpy/result.py", # mostly copypaste from rusted-py trying to stay close to original
-    "misc_python_utils/rustedpy/maybe.py", # mostly copypaste from rusted-py trying to stay close to original
+    "misc_python_utils/mermaid_utils/flowchart_from_code.py",
+    "misc_python_utils/error_handling/exception_as_err.py"
 ]

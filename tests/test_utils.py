@@ -55,15 +55,15 @@ def test_collapse_sequence() -> None:
     assert json.dumps([(o.key, o.value) for o in collapsed]) == json.dumps(expected)
 
 
-def test_group_dicts(  # noqa: ANN201
-    data=None,  # noqa: ANN001
+def test_sorted_groupby(  # noqa: ANN201
+    # data:dict[str,Any]|None=None,  # noqa: ANN001
 ):
-    if data is None:
-        data = [
-            {"foo": "bar", "jon": 1},
-            {"foo": "bar", "jon": 2},
-            {"foo": "foobar", "jon": 3},
-        ]
+    # if data is None:
+    data = [
+        {"foo": "bar", "jon": 1},
+        {"foo": "bar", "jon": 2},
+        {"foo": "foobar", "jon": 3},
+    ]
 
     def get_groupby_val(d: dict[str, Any]) -> str:  # noqa: FURB118
         return d["foo"]

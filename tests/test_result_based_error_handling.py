@@ -3,6 +3,7 @@ from beartype.roar import (
     BeartypeCallHintParamViolation,
     BeartypeCallHintReturnViolation,
 )
+from result import Err, Ok, Result
 
 from misc_python_utils.error_handling.as_result_logged import (
     as_result_logged_panic_for_param_violations,
@@ -14,7 +15,6 @@ from misc_python_utils.error_handling.exception_as_err import (
     return_err,
     unwrap_or_return,
 )
-from misc_python_utils.rustedpy.result import Err, Ok, Result
 
 # -----------------------------------------------------------------------------------
 
@@ -29,7 +29,7 @@ def test_exception_as_err_logged() -> None:
         ZeroDivisionError,
     )  # should spam your logs with the zero-division-error!
     with pytest.raises(BeartypeCallHintParamViolation):
-        fun_with_result("bad-param")
+        fun_with_result("bad-param")  # pyright: ignore [reportArgumentType]
     assert (
         fun_with_result(BAD_NUMBER).err() == BAD_NUMBER_ERROR_STR
     )  # is NOT spamming your logs
@@ -51,7 +51,7 @@ def test_wrong_expections():  # noqa: ANN201
             panic_exceptions={BeartypeCallHintParamViolation},
         )
     with pytest.raises(TypeError):
-        exceptions_as_err_logged(BaseException)
+        exceptions_as_err_logged(BaseException)  # pyright: ignore [reportArgumentType]
 
 
 # -----------------------------------------------------------------------------------
@@ -59,7 +59,7 @@ def test_wrong_expections():  # noqa: ANN201
 
 def test_panic_for_violated_inputparams_log_and_return_output_type_violations() -> None:
     with pytest.raises(BeartypeCallHintParamViolation):
-        dont_violate_my_params("bad-param")
+        dont_violate_my_params("bad-param")  # pyright: ignore [reportArgumentType]
 
     output = dont_violate_my_params(
         1,
@@ -70,7 +70,7 @@ def test_panic_for_violated_inputparams_log_and_return_output_type_violations() 
 @as_result_logged_panic_for_param_violations(Exception)
 def dont_violate_my_params(x: int) -> float:
     print(x)  # noqa: T201
-    return "bar"
+    return "bar"  # pyright: ignore [reportReturnType]
 
 
 # -----------------------------------------------------------------------------------

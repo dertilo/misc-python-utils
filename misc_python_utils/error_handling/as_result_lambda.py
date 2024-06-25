@@ -2,9 +2,9 @@ import functools
 import inspect
 
 from beartype.typing import Callable, ParamSpec, TypeVar
+from result import Err, Ok, Result
 
 from misc_python_utils.beartypes import nobeartype
-from misc_python_utils.rustedpy.result import Err, Ok, Result
 
 T = TypeVar("T", covariant=True)  # Success type
 E = TypeVar("E", covariant=True)  # Error type
