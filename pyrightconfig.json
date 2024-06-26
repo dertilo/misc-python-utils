@@ -1,5 +1,5 @@
 {
-  "typeCheckingMode": "all",
+  "typeCheckingMode": "basic", // basic to ease transition, this entire config is (automatically copypasted and) to be adapted to each project
   "reportAny": false,
   "reportImplicitOverride": false,
   // cause typing.override leads to false positives
@@ -7,20 +7,21 @@
   "reportMissingParameterType": false, // already done by ruff
   "reportUnusedCallResult": false, // gibt schlimmeres!
   "reportPrivateUsage": false, // underscore convention is enough!
-  "reportIncompatibleMethodOverride": false,
+  "reportIncompatibleMethodOverride": false, // lets ignore liskov, inheritance is bad anyhow
+  "reportIncompatibleVariableOverride": false,// lets ignore liskov, inheritance is bad anyhow
   "reportMissingTypeStubs": false,
-  "reportUnknownLambdaType": false,
-
+//  "reportUnknownLambdaType": false, // seems to affect all lambdas
   "reportUnknownVariableType": "warning",
   "reportUnknownMemberType": "warning",
   "reportUnknownArgumentType": "warning",
   "reportMissingTypeArgument": "warning",
   "reportUnknownParameterType": "warning",
-  "reportIgnoreCommentWithoutRule": "warning",
   "reportUnusedVariable": "warning",
   "exclude": [
-//    "tests",
+      "**/___*", // local unstage files just for debugging
+    //    "tests",
     "misc_python_utils/mermaid_utils/flowchart_from_code.py",
-    "misc_python_utils/mermaid_utils/_mermaid_markdown_from_nested_dataclasses.py"
-  ], // TODO
+    "misc_python_utils/mermaid_utils/_mermaid_markdown_from_nested_dataclasses.py",
+    "misc_python_utils/gitrepo_utils/git_repo_content.py",
+  ],
 }

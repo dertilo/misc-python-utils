@@ -2,6 +2,7 @@ import functools
 import inspect
 import logging
 import traceback
+from typing import Generic
 
 from beartype import beartype
 from beartype.roar import BeartypeCallHintParamViolation
@@ -101,7 +102,7 @@ SomeError = TypeVar(
 
 
 class EarlyReturnError(
-    Exception
+    Exception, Generic[E]
 ):  # TODO: cannot make it generic like: Generic[E], python complains: TypeError: catching classes that do not inherit from BaseException is not allowed
     def __init__(self, error_value: E) -> None:
         self.error_value = error_value
@@ -115,13 +116,15 @@ def return_early(f: Callable[P, Result[R, E]]) -> Callable[P, Result[R, E]]:
     based on: https://github.com/rustedpy/result/blob/021d9945f9cad12eb49386691d933c6688ac89a9/src/result/result.py#L439
 
     Decorator to turn a function into one that returns a ``Result``.
+    -> this is extemely dangerous! cause when refactoring your code you easily produce exception-throwing over multiple layers of function-calls!
     """
 
     @functools.wraps(f)
     def wrapper(*args: P.args, **kwargs: P.kwargs) -> Result[R, E]:
         try:
             return f(*args, **kwargs)
-        except EarlyReturnError as exc:
+        except EarlyReturnError as exc:  # one cannot catch generic exceptions!
+            exc: EarlyReturnError[E]  # but one can type-hint to keep pyright calm!
             return Err[E](
                 exc.error_value
             )  # E should be a type-union that includes all possible error-types
@@ -129,7 +132,7 @@ def return_early(f: Callable[P, Result[R, E]]) -> Callable[P, Result[R, E]]:
     return wrapper
 
 
-def raise_early_return_error(e: E) -> EarlyReturnError:  # pyright: ignore [reportInvalidTypeVarUse] TODO: cannot make exceptions generic!
+def raise_early_return_error(e: E) -> EarlyReturnError[E]:  # pyright: ignore [reportInvalidTypeVarUse] TODO: cannot make exceptions generic!
     raise EarlyReturnError(e)
 
 
