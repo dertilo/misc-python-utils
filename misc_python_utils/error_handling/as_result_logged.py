@@ -22,6 +22,18 @@ TBE = TypeVar(
 )  # tilo:  original code had "BaseException" here, but thats too liberal! one should not catch SystemExit, KeyboardInterrupt, etc.!
 
 
+def as_result_logged_panic_for_param_violations(
+    *exceptions: type[TBE],
+) -> Callable[[Callable[P, R]], Callable[P, Result[R, TBE]]]:
+    """
+    exceptions as result but panic for param violations
+    """
+    return as_result_logged(
+        *exceptions,
+        panic_exceptions={BeartypeCallHintParamViolation},
+    )
+
+
 def as_result_logged(
     *exceptions: type[TBE],
     panic_exceptions: set[type[BaseException]] | None = None,
@@ -71,18 +83,6 @@ def as_result_logged(
         return wrapper
 
     return decorator
-
-
-def as_result_logged_panic_for_param_violations(
-    *exceptions: type[TBE],
-) -> Callable[[Callable[P, R]], Callable[P, Result[R, TBE]]]:
-    """
-    exceptions as result but panic for param violations
-    """
-    return as_result_logged(
-        *exceptions,
-        panic_exceptions={BeartypeCallHintParamViolation},
-    )
 
 
 # tb = traceback.format_tb(exc.__traceback__) # TODO: seems to be the same as tb = traceback.format_exc()
