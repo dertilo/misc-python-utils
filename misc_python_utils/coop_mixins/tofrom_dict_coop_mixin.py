@@ -28,7 +28,7 @@ class FromDictCoopMixin(FixedDict):
             for f in fields(cls)
             if f.init and f.name in parsed_jsn.keys()
         }
-        return cls(**just_known_kwargs)  # noqa: Unexpected argument
+        return cls(**just_known_kwargs)  # noqa: pycharm (Unexpected argument)
 
     @classmethod
     def _from_dict(cls, jsn: dict[str, Any]) -> dict[str, Any]:

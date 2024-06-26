@@ -9,8 +9,10 @@ from misc_python_utils.error_handling.as_result_logged import (
     as_result_logged_panic_for_param_violations,
 )
 from misc_python_utils.error_handling.exception_as_err import (
-    EarlyReturnError,
     exceptions_as_err_logged,
+)
+from misc_python_utils.error_handling.return_early import (
+    EarlyReturnError,
     return_early,
     return_err,
     unwrap_or_return,

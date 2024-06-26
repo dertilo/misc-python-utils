@@ -48,7 +48,7 @@ def return_early(f: Callable[P, Result[R, E]]) -> Callable[P, Result[R, E]]:
     return wrapper
 
 
-def raise_early_return_error(e: E) -> EarlyReturnError[E]:  # pyright: ignore [reportInvalidTypeVarUse] TODO: cannot make exceptions generic!
+def raise_early_return_error(e: E) -> EarlyReturnError[E]:
     raise EarlyReturnError(e)
 
 
@@ -59,4 +59,4 @@ def unwrap_or_return(result: Result[T_co, E]) -> T_co:
     return result.unwrap_or_else(return_err)  # pyright: ignore [reportReturnType]
 
 
-uR = unwrap_or_return
+uR = unwrap_or_return  # noqa: N816

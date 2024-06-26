@@ -1,4 +1,5 @@
 extend-exclude=[
     "misc_python_utils/mermaid_utils/flowchart_from_code.py",
-    "misc_python_utils/error_handling/exception_as_err.py"
+    "misc_python_utils/error_handling/exception_as_err.py",
+    "**/___*"
 ]

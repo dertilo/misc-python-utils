@@ -34,7 +34,7 @@ def filter_gen_targz_members(
         for member in g:
             member: tarfile.TarInfo
             if is_of_interest_fun(member):
-                f: tarfile.ExFileObject | None = tar.extractfile(member)
+                f: tarfile.ExFileObject | None = tar.extractfile(member)  # pyright: ignore [reportAssignmentType]
                 # https://stackoverflow.com/questions/37474767/read-tar-gz-file-in-python
                 # tarfile.extractfile() can return None if the member is neither a file nor a link.
                 neither_file_nor_link = f is None

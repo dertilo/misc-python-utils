@@ -1,4 +1,3 @@
-# flake8: noqa WPS202
 from dataclasses import dataclass
 
 import pytest

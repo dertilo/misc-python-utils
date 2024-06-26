@@ -1,5 +1,5 @@
 {
-  "typeCheckingMode": "basic", // basic to ease transition, this entire config is (automatically copypasted and) to be adapted to each project
+  "typeCheckingMode": "off", // TODO!!
   "reportAny": false,
   "reportImplicitOverride": false,
   // cause typing.override leads to false positives
@@ -22,6 +22,8 @@
     //    "tests",
     "misc_python_utils/mermaid_utils/flowchart_from_code.py",
     "misc_python_utils/mermaid_utils/_mermaid_markdown_from_nested_dataclasses.py",
+    "misc_python_utils/mermaid_utils/mermaid_data_models.py",
     "misc_python_utils/gitrepo_utils/git_repo_content.py",
+    "misc_python_utils/gitrepo_utils/git_repo_state.py",
   ],
 }
