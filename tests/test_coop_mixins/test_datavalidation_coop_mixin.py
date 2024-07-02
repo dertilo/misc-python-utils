@@ -1,7 +1,10 @@
 from dataclasses import InitVar, dataclass
 
 import pytest
+from beartype import beartype
+from beartype.roar import BeartypeCallHintParamViolation
 
+from misc_python_utils.beartypes import NeStr, nobeartype
 from misc_python_utils.coop_mixins.data_validation_coop_mixin import (
     CoopDataValidationError,
     DataValidationCoopMixinBase,
@@ -180,4 +183,35 @@ def test_as_result() -> None:
 
     bad = NiceTextUnvalidated("bad")
     r = bad.parse_validate_as_result()
+    assert r.is_err()
+
+
+@beartype  # normally these are added via import hooks (beartype claw)
+@dataclass
+class NiceTextWithBeartyped(NiceText):
+    text: NeStr
+
+
+@nobeartype
+@dataclass
+class NiceTextWithBeartypedUnvalidated(
+    NiceTextWithBeartyped,
+    DataValidationCoopMixinBaseWithResult[NiceTextWithBeartyped],
+):
+    pass
+
+
+def test_validation_with_beartype_as_result() -> None:
+    EMPTY_STR = ""
+    o = NiceTextWithBeartypedUnvalidated(text=EMPTY_STR)
+    r = o.parse()
+    assert r.is_err()
+    assert isinstance(r.err(), BeartypeCallHintParamViolation)
+    o = NiceTextWithBeartypedUnvalidated("nice")
+    r = o.parse()
+    assert r.is_ok()
+    assert isinstance(r.ok(), NiceText)  # this is the funpart!
+
+    bad = NiceTextWithBeartypedUnvalidated("bad")
+    r = bad.parse()
     assert r.is_err()

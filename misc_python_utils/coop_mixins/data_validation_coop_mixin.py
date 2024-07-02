@@ -1,6 +1,7 @@
 from dataclasses import dataclass, field, fields
 from typing import Generic, TypeVar, final
 
+from beartype.roar import BeartypeCallHintParamViolation
 from result import Err, Ok, Result
 
 from misc_python_utils.dataclass_utils import FixedDict
@@ -50,8 +51,22 @@ T = TypeVar("T")
 @dataclass
 class DataValidationCoopMixinBaseWithResult(DataValidationCoopMixinBase, Generic[T]):
     """
-    not recommended to use this class, no way to make sure that "parse_validate_as_result" was called!
-    well actually thats the same with Buildables!
+    handles data-validation errors (CoopDataValidationError) as Result
+
+    takes FIRST_PARENT_CLASS (which second class in MRO) for instantiation
+    example:
+    ```python
+    @nobeartype # need to explicitly exclude this from beartype validation
+    @dataclass
+    class FasterWhisperWordUnparsed(
+        FasterWhisperWord,
+        DataValidationCoopMixinBaseWithResult[FasterWhisperWord],
+    ):
+        pass
+    ```
+
+    TODO: beartype validated data goes before/around this result handling
+         beartype still throws its own exception!
     """
 
     def __post_init__(self):  # pycharm complains, cause we don't obey the "final" here
@@ -61,15 +76,21 @@ class DataValidationCoopMixinBaseWithResult(DataValidationCoopMixinBase, Generic
         """
 
     @final
-    def parse_validate_as_result(self) -> Result[T, CoopDataValidationError]:
+    def parse_validate_as_result(
+        self,
+    ) -> Result[T, CoopDataValidationError | BeartypeCallHintParamViolation]:
         try:
-            clazz: type[T] = self.__class__.__mro__[1]
+            FIRST_PARENT_CLASS = 1
+            clazz: type[T] = self.__class__.__mro__[FIRST_PARENT_CLASS]
             res = Ok(
                 clazz(
                     **{f.name: getattr(self, f.name) for f in fields(clazz) if f.init},
                 ),
             )
-        except CoopDataValidationError as e:
+        except (
+            CoopDataValidationError,
+            BeartypeCallHintParamViolation,
+        ) as e:  # TODO: also catch beartype-validation errors?
             res = Err(e)
         return res
 

@@ -134,7 +134,7 @@ class DataclassDict(dict):
         self.__dict__[__key] = __value
 
     def to_dict(self) -> dict[str, Any]:
-        return {k: v for k, v in self.items() if k != PSEUDO_SLOTS}
+        return {f.name: self[f.name] for f in dataclasses.fields(self) if f.init}
 
 
 @dataclasses.dataclass
